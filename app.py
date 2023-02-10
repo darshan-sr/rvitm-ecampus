@@ -28,7 +28,7 @@ import zipfile
 # Set page Configuration 
 
 st.set_page_config(page_title='Student progress Analysis',
-page_icon='/Users/darshangowda/StreamlitApp/RVlogo.png', 
+page_icon='RVlogo.png', 
 initial_sidebar_state="expanded") 
 
 # Hide default header footer and hamburger menu
@@ -47,7 +47,7 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 # applying CSS styling for the sidebar and adding the sidebar RV logo
 
-with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
+with open('style1.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
 
 def get_img_as_base64(file):
@@ -55,7 +55,7 @@ def get_img_as_base64(file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-img = get_img_as_base64("/Users/darshangowda/StreamlitApp/sidebarlogo.jpg")
+img = get_img_as_base64("sidebarlogo.jpg")
 
 page_bg_img = f"""
 
@@ -91,7 +91,7 @@ def student_analysis():
         
         if branch_choice == "CSE":
             try:
-                xls = pd.ExcelFile('/Users/darshangowda/Documents/SavedXLSX/2021.CSE.StudentMarksSheet.xlsx')
+                xls = pd.ExcelFile('2021.CSE.StudentMarksSheet.xlsx')
                 plot_analysis(xls)
             except:
                 st.write("Data not found")
@@ -627,11 +627,6 @@ def StudentMarks(xls,input_str):
         fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
         st.plotly_chart(fig)
 
-        # data = pd.read_excel(xls, sheet_name=sheet_name)
-        # student_data = data.loc[data['USN'] == input_str]
-        # Failed_Subjects=int(student_data[data.columns[44]].values[0])
-        # col1 = st.columns(1)
-        # col1.metric("FAILED SUBJECTS",Failed_Subjects)
 
 
 
@@ -1064,7 +1059,7 @@ def progress_report():
 with st.sidebar:
     
         
-    with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
+    with open('style1.css') as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
     selected = option_menu(
             menu_title= "MAIN MENU",

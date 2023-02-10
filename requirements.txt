@@ -1,0 +1,9 @@
+deta==1.1.0
+pandas==1.5.2
+plotly==5.2.2
+protobuf==4.21.12
+reportlab==3.6.12
+streamlit==1.17.0
+streamlit_authenticator==0.1.5
+streamlit_option_menu==0.3.2
+termcolor==2.2.0

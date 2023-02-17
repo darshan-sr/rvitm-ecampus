@@ -6,34 +6,61 @@ from streamlit_option_menu import option_menu
 import base64 
 
 import streamlit_authenticator as stauth
-import database as db
+from streamlit_extras.app_logo import add_logo
 
-
+# import database as db
 from datetime import datetime
 from google.cloud import firestore
 from google.cloud.firestore import Client
 
-
-from reportlab.lib import colors
+from streamlit_extras.dataframe_explorer import dataframe_explorer
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle,Paragraph,Image
 import io
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 import textwrap
 import datetime
 import zipfile
 
-# Set page Configuration 
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.utils import COMMASPACE
+from email import encoders
 
-st.set_page_config(page_title='Student progress Analysis',
-page_icon='RVlogo.png', 
+
+st.set_page_config(page_title='RVITM-eCampus',
+page_icon='/Users/darshangowda/StreamlitApp/RVlogo.png', 
 initial_sidebar_state="expanded") 
 
 # Hide default header footer and hamburger menu
 
+add_logo("/Users/darshangowda/Downloads/HD_transparent_picture.png")
 
+
+from deta import Deta
+DETA_KEY = "d0mmbh4h7yn_nrn34JKugUPMyyXjW67tZRSYEhokL2Tj"
+deta = Deta(DETA_KEY)
+db = deta.Base("department-usersdb")
+
+def insert_user(username, name, password):
+    """Returns the user on a successful user creation, otherwise raises and error"""
+    return db.put({"key": username, "name": name, "password": password})
+
+def fetch_all_users():
+    """Returns a dict of all users"""
+    max_attempts = 1000
+    attempts = 0
+    while attempts < max_attempts:
+        try:
+            res = db.fetch()
+            return res.items
+        except Exception as e:
+            attempts += 1
+            if attempts == max_attempts:
+                raise e
 
 
 hide_st_style = """
@@ -45,9 +72,17 @@ hide_st_style = """
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# applying CSS styling for the sidebar and adding the sidebar RV logo
+def get_img_as_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
 
-with open('style1.css') as f:
+imgg = get_img_as_base64("/Users/darshangowda/Documents/StudentAnalytics.py/logo.png")
+
+
+
+
+with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
 
 def get_img_as_base64(file):
@@ -55,7 +90,7 @@ def get_img_as_base64(file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-img = get_img_as_base64("sidebarlogo.jpg")
+img = get_img_as_base64("/Users/darshangowda/StreamlitApp/sidebarlogo.jpg")
 
 page_bg_img = f"""
 
@@ -76,7 +111,6 @@ st.sidebar.title("")
 st.sidebar.title("")
 
 
-# Student analysis Choice and the links for the excel sheets
 
 def student_analysis():
     st.markdown("<div style='text-align:center;'><h1>STUDENT MARKS ANALYSIS 📈</h1></div>", unsafe_allow_html=True,)
@@ -91,16 +125,19 @@ def student_analysis():
         
         if branch_choice == "CSE":
             try:
-                xls = pd.ExcelFile('2021.CSE.StudentMarksSheet.xlsx')
+                xls = pd.ExcelFile('/Users/darshangowda/Documents/SavedXLSX/2021.CSE.StudentMarksSheet.xlsx')
                 plot_analysis(xls)
             except:
-                st.write("Data not found")
+                st.warning("Data not found / yet to be updated")
 
         if branch_choice == "ISE":
-
-            url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
-            xls = pd.ExcelFile(url, engine='openpyxl')
-            plot_analysis(xls)
+            try:
+                # url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+                url = "/Users/darshangowda/Documents/SavedXLSX/2021/ISE/2021.ISE.StudentMarksSheet.xlsx"
+                xls = pd.ExcelFile(url, engine='openpyxl')
+                plot_analysis(xls)
+            except:
+                st.warning("Data not found / yet to be updated")             
 
 
         if branch_choice == "ECE":
@@ -108,21 +145,34 @@ def student_analysis():
                 xls = pd.ExcelFile('/Users/darshangowda/Documents/SavedXLSX/2021/ECE/2021.ECE.StudentMarksSheet.xlsx')
                 plot_analysis(xls)
             except:
-                st.write("Data not found")
+                st.warning("Data not found / yet to be updated")
 
         if branch_choice == "ME":
             try:
                 xls = pd.ExcelFile('/Users/darshangowda/Documents/SavedXLSX/2021/ME/2021.ME.StudentMarksSheet.xlsx')
                 plot_analysis(xls)
             except FileNotFoundError:
-                st.write("Data not found")
+                st.warning("Data not found / yet to be updated")
 
     if batch_choice =="2020 Batch":
         branch = st.selectbox("Select the Branch", ["CSE", "ISE","EC", "ME"])
 
         if branch == "ISE":
-            xls = pd.ExcelFile("/Users/darshangowda/Documents/2020.ISE-7.xlsx")
-            plot_analysis(xls)
+            try:
+                xls = pd.ExcelFile("/Users/darshangowda/Documents/2020.ISE-7.xlsx")
+                plot_analysis(xls)
+            except FileNotFoundError:
+                st.warning("Data not found / yet to be updated")
+
+    if batch_choice =="2019 Batch":
+        branch = st.selectbox("Select the Branch", ["CSE", "ISE","EC", "ME"])
+
+        if branch == "ISE":
+            try:
+                xls = pd.ExcelFile("/Users/darshangowda/Documents/SavedXLSX/2019/ISE/2019.ISE.StudentMarksSheet.xlsx")
+                plot_analysis(xls)
+            except FileNotFoundError:
+                st.warning("Data not found / yet to be updated")
 
 # Plotting all the analysis for Class Analysis Section
 
@@ -152,7 +202,7 @@ def plot_analysis(xls):
     st.markdown("<div style='text-align:center;'><h4>          </h4></div>", unsafe_allow_html=True)
     selected = option_menu(
         menu_title=None,
-        options=["Semester Analysis","Subject Wise Analysis","Student wise Analysis"],
+        options=["Semester Analysis","Subject Analysis","Student wise Analysis"],
         icons=["person-workspace","stack","person"],
         orientation="horizontal",
         
@@ -274,7 +324,7 @@ def plot_analysis(xls):
 
 
 
-    elif selected == "Subject Wise Analysis":
+    elif selected == "Subject Analysis":
 
         subject_choices = [data.iloc[0, 3], data.iloc[0, 7], data.iloc[0, 11], data.iloc[0, 15], data.iloc[0, 19], data.iloc[0, 23], data.iloc[0, 27], data.iloc[0, 31], data.iloc[0, 35]]
         Subject_Choice = st.selectbox("Select the Subject:", subject_choices)
@@ -556,7 +606,7 @@ def USN_analysis():
     st.button("Submit")
     
     if "21IS" in input_str:
-        url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+        url = "/Users/darshangowda/Downloads/2021.ISE-6.xlsx"
         xls = pd.ExcelFile(url,engine='openpyxl')
         StudentMarks(xls,input_str)
 
@@ -627,6 +677,11 @@ def StudentMarks(xls,input_str):
         fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
         st.plotly_chart(fig)
 
+        # data = pd.read_excel(xls, sheet_name=sheet_name)
+        # student_data = data.loc[data['USN'] == input_str]
+        # Failed_Subjects=int(student_data[data.columns[44]].values[0])
+        # col1 = st.columns(1)
+        # col1.metric("FAILED SUBJECTS",Failed_Subjects)
 
 
 
@@ -744,8 +799,7 @@ def StudentMarks(xls,input_str):
             chart_choice = st.selectbox("Select the type of Chart you need:", ["Bar Chart","Grouped Bar Chart","Area Graph","Funnel"] )
 
             if chart_choice == "Bar Chart": 
-                subject_marks_text = ['{:.0f}'.format(x) for x in subject_marks]
-                fig = px.bar(x=subject_names, y=subject_marks,text=subject_marks_text)
+                fig = px.bar(x=subject_names, y=subject_marks)
                 fig.update_layout(xaxis_title='', yaxis_title='Total Marks', width=700, height=600)
                 st.plotly_chart(fig)
             if chart_choice == "Area Graph": 
@@ -777,15 +831,17 @@ def StudentMarks(xls,input_str):
                 st.plotly_chart(fig)
 
 
+
+
 def department_login():
     
-    users = db.fetch_all_users()
+    users = fetch_all_users()
     usernames = [user["key"] for user in users]
     names = [user["name"] for user in users]
     hashed_passwords = [user["password"] for user in users]
 
     authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
-        "sales_dashboard", "abcdef", cookie_expiry_days=30)
+        "sales_dashboard", "abcdef", cookie_expiry_days=0)
     name, authentication_status, username = authenticator.login("LOGIN", "main")
 
     if authentication_status == False:
@@ -793,22 +849,28 @@ def department_login():
 
 
     if authentication_status:
-        st.success("Logged in successfully")
-        authenticator.logout("Logout", "sidebar")
 
-        if username == "ISE":
-            batch_choice = st.selectbox("Select the year of the Batch", ["2019 Batch", "2020 Batch","2021 Batch", "2022 Batch"])
-            if batch_choice == "2021 Batch":
-                uploaded_file = st.file_uploader("Choose a file", type="xlsx")
-                if uploaded_file:
-                    with open("/Users/darshangowda/Documents/SavedXLSX/2021/ISE/2021.ISE.StudentMarksSheet.xlsx", "wb") as f:
-                        f.write(uploaded_file.read())
-                    st.success("File saved in desired folder.")
+      st.sidebar.success("Welcome "+username+"")
+      authenticator.logout("Logout", "sidebar")
+
+      if username == "isedep":
+        
+
+        batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
+        if batch_choice == "2021 Batch":
+            df = pd.read_excel("/Users/darshangowda/Documents/SavedXLSX/2021/ISE/2021.ISE.StudentMarksSheet.xlsx")
+            st.dataframe(df)
+        uploaded_file = st.file_uploader("Choose a file", type="xlsx")
+        if uploaded_file:
+            with open("/Users/darshangowda/Documents/SavedXLSX/2021/ISE/2021.ISE.StudentMarksSheet.xlsx", "wb") as f:
+                f.write(uploaded_file.read())
+            st.success("File uploaded Successfully!")
+        
 
 
 
 
-
+    
 def how_to_use():
     st.markdown("<div style='text-align:center;'><h1>GUIDE TO USE THE WEBSITE 👨🏻‍💻</h1></div>", unsafe_allow_html=True,)
     video_iframe = '<iframe width="700" height="405" src="https://youtube.com/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
@@ -833,7 +895,6 @@ def Submit_Feedback():
             "name": input_name,
             "mail": input_mail,
             "message": input_message,
-            "date": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
         }
         doc_ref = db.collection("Feedback").document()
     
@@ -863,9 +924,78 @@ def Submit_Feedback():
 
 def about():
 
-    st.title("About")
 
-def generate_pdf(df, row,Branch_Choice,test_choice,submission_d):
+    with open('/Users/darshangowda/AUTHPROJECT/main.css') as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+    st.markdown("<div style='text-align:center;'><h1>About RVITM-eCampus</h1></div>", unsafe_allow_html=True,)
+    st.title("")
+    aboutmessage = "Welcome to RVITM-eCampus, the academic web application of RV Institute of Technology & Management. Our platform is designed to streamline the academic processes for students, teachers, and administrators with the use of cutting-edge technologies like Python, Firebase, Django, Plotly, and ReportLab. Our goal is to provide an easy-to-use, efficient, and accurate solution for result analysis, progress report generation, and student attendance management."
+    aboutmessage2 = "Please note that our web application is still in its starting phase and is under development. Nevertheless, we are dedicated to continuously improving and adding new features to make the educational process more efficient and accessible."
+    aboutmessage3 = "RVITM-eCampus is built with the user in mind and is designed to simplify the complexities of the academic process, making it easy to access and understand for everyone involved. With its user-friendly interface and powerful analytical tools, you can quickly analyze student performance, generate progress reports, and monitor attendance with ease."
+    aboutmessage4 = "We are committed to providing the best possible experience for our users and continuously work towards improving our platform with new features and updates. Our goal is to support the academic community at RV Institute of Technology & Management and help make the educational process more efficient, accessible, and meaningful for all."
+    aboutmessage5 = "Thank you for choosing RVITM-eCampus. We hope you find it useful and we look forward to serving you."
+    st.write(aboutmessage)
+    st.write(aboutmessage2)
+    st.write(aboutmessage3)
+    st.write(aboutmessage4)
+    st.write(aboutmessage5)
+    
+
+
+    st.title("")
+
+    with st.expander("Message from ISE HOD"):
+        st.markdown("<div style='text-align:center;'><h2>Message from ISE HOD</h2></div>", unsafe_allow_html=True,)
+        st.title("")
+        
+    
+        with open('/Users/darshangowda/AUTHPROJECT/main.css') as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    
+        col1, col2 = st.columns(2)
+        
+        profile_pic = "/Users/darshangowda/Downloads/isehod_img-modified.png"
+        with col1:
+            st.image(profile_pic, width=230)
+    
+            st.markdown("<div style=''><h4>Dr LATHA CA</h4></div>", unsafe_allow_html=True,)
+            st.write("Professor & Head of Department")
+        
+        with col2:
+            
+            st.write('I want to Congratulate our third semester ISE students Mr. Darshan Gowda and Mr. Abhijath Dakshesh, for their Beautiful, User friendly, Efficient software, "RVITM e-campus". This has made the lives of Faculty, Students and Parents very easy, saving a lot of time in processing and arriving at various statistics required for varied purposes and accreditations. I also thank and congratulate ISE faculty Ms. Sahana Damale for the Initiate, Guidance and Motivating the duo for the same.')
+            st.write("I look forward many such projects which are useful in our day-to-day life , not only from the duo and also from other students... Wishing them all the Best and Prosperity......-Dr LATHA C A")
+    
+    
+
+    with st.expander("Message from Teacher Co-ordinator"):
+        st.markdown("<div style='text-align:center;'><h2>Message from Teacher Co-ordinator</h2></div>", unsafe_allow_html=True,)
+        st.title("")
+        
+    
+        with open('/Users/darshangowda/AUTHPROJECT/main.css') as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    
+        col1, col2 = st.columns(2)
+        
+        profile_pic = "/Users/darshangowda/Downloads/11.-Sahana_Photo-modified.png"
+        with col1:
+
+            st.image(profile_pic, width=230)
+    
+            st.markdown("<div style=''><h4>SAHANA DAMALE</h4></div>", unsafe_allow_html=True,)
+            st.write("Assistant Professor ")
+        
+        with col2:
+    
+            st.write("The student result analysis tool is a software application that is designed to help educators and administrators to analyze and interpret student performance data. This tool provides a comprehensive and easy-to-use interface that allows users to view, analyze and compare student results across multiple subjects, classes, and assessment types.")
+            st.write("One of the key benefits of a student result analysis tool is the ability to quickly identify areas where students are excelling and areas where they are struggling. ")
+            st.write("Another important feature of a student result analysis tool is the ability to generate reports and share data with stakeholders. ")
+            st.write("It is commendable for Mr. Darshan Gowda and Mr. Abhijat Dakshesh to have developed the student result analysis tool. Developing such a tool requires a strong understanding of data analysis, programming, and user experience design, as well as an appreciation for the needs of educators and administrators.  ")
+
+
+def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generation):  
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0, leftMargin=50, rightMargin=50, bottomMargin=0)
     
@@ -1014,38 +1144,129 @@ def progress_pdf():
     uploaded_file = st.file_uploader("Upload the Marks Sheet Excel File for the test:", type=["xlsx"])
     
     if uploaded_file is not None:
+      tab1, tab2, tab3 = st.tabs(["Generate & Download Report","Preview Progress Report" ,"Confirm & Send Email"])
+      with tab1:
         df = pd.read_excel(uploaded_file)
         st.write("Generating Progress Report...")
         
         progress_bar = st.progress(0)
         
-        for i in range(2,df.shape[0]):
-            buffer = generate_pdf(df, i,Branch_Choice,test_choice,submission_d)
-            file_name = f"{df.iloc[i, 2]}.pdf"
+        # Create a zip file in memory
+        zip_file = io.BytesIO()
+        with zipfile.ZipFile(zip_file, mode='w') as archive:
+            for i in range(2,df.shape[0]):
+                buffer = io.BytesIO()
+                generate_pdf(df, i,Branch_Choice,test_choice,submission_d,date_of_generation)
+                file_name = f"{df.iloc[i, 2]}.pdf"
+
+                archive.writestr(file_name, buffer.getvalue())
         
-            with open(file_name, "wb") as f:
-                f.write(buffer.getvalue())
-            
-            with open(file_name, "rb") as f:
-                b64 = base64.b64encode(f.read()).decode()
-            
-            download_link = f'<a href="data:application/zip;base64,{b64}" download="{file_name}">Download {file_name}</a>'
+            b64 = base64.b64encode(zip_file.getvalue()).decode()
+            download_link = f'<a href="data:application/zip;base64,{b64}" download="report.zip">Download all PDFs in zip</a>'
             st.markdown(download_link, unsafe_allow_html=True)
+                    
+            progress_value = int((i - 1) / (df.shape[0] - 2) * 100)
+            progress_bar.progress(progress_value)
+        
+      with tab2:
+      
+        df = pd.read_excel(uploaded_file)
+        st.write("Generating Preview of Progress Report...")
+        
+        # Show a progress bar while the PDFs are being generated
+        progress_bar = st.progress(0)
+        
+        # Generate the PDFs for each student and store it in a dictionary with the student name as the key
+        pdfs = {}
+        for i in range(2, df.shape[0]):
+            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d, date_of_generation)
+            file_name = f"{df.iloc[i, 2]}.pdf"
+         
+            b64 = base64.b64encode(buffer.getvalue()).decode()
+            pdfs[file_name] = b64
             
             progress_value = int((i - 1) / (df.shape[0] - 2) * 100)
             progress_bar.progress(progress_value)
+        
+        # Show a selectbox to select the PDF to preview
+        selected_pdf = st.selectbox("Select a student", list(pdfs.keys()))
+        if selected_pdf is not None:
+            b64 = pdfs[selected_pdf]
+            st.write("""
+            <iframe
+                src="data:application/pdf;base64,{b64}"
+                style="border: none; width: 100%; height: 970px;"
+            ></iframe>
+            """.format(b64=b64), unsafe_allow_html=True)
+
+      with tab3:
+
+       df = pd.read_excel(uploaded_file)
+       SMTP_SERVER = "smtp.gmail.com"
+       SMTP_PORT = 587
+       with st.form("login_form"):
+         st.write("Enter the mail ID login from which you want to send the mail:")
+         
+         SMTP_USERNAME = st.text_input('Input mail ID',help="Credentials are safe and not stored anywhere")
+         SMTP_PASSWORD = st.text_input('Input password',type='password')
+         st.checkbox("I confirm that the Report generated are correct")
+         submitted = st.form_submit_button("Confirm & send email")
+
+       if submitted:
+        st.write("Sending Email...")
+        total_emails = df.shape[0] - 2
+        email_sent = 0
+        progress_bar = st.progress(0)
+
+        for i in range(2, df.shape[0]):
+            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,date_of_generation)
+            file_name = f"{df.iloc[i, 2]}.pdf"
+            email = df.iloc[i, 3]
+            father = str(df.iloc[i, 4])
+            student_name = str(df.iloc[i, 1])
+
+            msg = MIMEMultipart()
+            msg['From'] = SMTP_USERNAME
+            msg['To'] = COMMASPACE.join([email])
+            msg['Subject'] = ""+test_choice+"\u00a0 "+semester
+            
+            body = "Dear "+father+" ,\n\nHerewith enclosed the "+semester+" "+test_choice+"\u00a0  of your ward "+student_name+".\n\nThanks & Regards,\nRVITM"
+            text = MIMEText(body)
+            msg.attach(text)
+        
+            # Attach the generated PDF
+            part = MIMEBase('application', "octet-stream")
+            part.set_payload((buffer.getvalue()))
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', 'attachment', filename=file_name)
+            msg.attach(part)
+        
+            # Connect to the SMTP server and send the email
+            smtpObj = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+            smtpObj.ehlo()
+            smtpObj.starttls()
+            smtpObj.login(SMTP_USERNAME, SMTP_PASSWORD)
+            smtpObj.sendmail(SMTP_USERNAME, [email], msg.as_string())
+            smtpObj.quit()
+        
+            st.write("Email sent to\u00a0"+student_name+"\u00a0 parent's mail - ", email)
+
+            email_sent += 1
+            progress_bar.progress(email_sent / total_emails)
+        st.success("All Progress Reports sent successfully")
 
 
 
 
 def progress_report():
-    users = db.fetch_all_users()
+    
+    users = fetch_all_users()
     usernames = [user["key"] for user in users]
     names = [user["name"] for user in users]
     hashed_passwords = [user["password"] for user in users]
 
     authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
-        "sales_dashboard", "abcdef", cookie_expiry_days=30)
+        "sales_dashboard", "abcdef", cookie_expiry_days=0)
     name, authentication_status, username = authenticator.login("LOGIN", "main")
 
     if authentication_status == False:
@@ -1053,16 +1274,61 @@ def progress_report():
 
 
     if authentication_status:
+      st.sidebar.success("Welcome "+username+"")
+      authenticator.logout("Logout", "sidebar")
+
+      progress_pdf()
+    
+    
+def attendance():
+ 
+ 
+ selected = option_menu(
+        menu_title=None,
+        options=["Login","Signup"],
+        icons=["person-workspace","person"],
+        orientation="horizontal",
+    )
+ if selected == "Login":
+    users = fetch_all_users()
+    usernames = [user["key"] for user in users]
+    names = [user["name"] for user in users]
+    hashed_passwords = [user["password"] for user in users]
+
+    authenticator = stauth.Authenticate(names, usernames, hashed_passwords,
+        "sales_dashboard", "abcdef", cookie_expiry_days=0)
+    name, authentication_status, username = authenticator.login("LOGIN", "main")
+
+    if authentication_status == False:
+        st.error("Username/password is incorrect")
+
+
+    if authentication_status:
+        st.sidebar.success("Welcome "+username+"")
         authenticator.logout("Logout", "sidebar")
-        progress_pdf()
+
+
+
+ if selected == "Signup":
+    st.title("")
+    with st.form(key="signup"):
+        email = st.text_input("College Email ID",key="email")
+        USN = st.text_input("USN",key="USN")
+        password = st.text_input("Password",type="password",key="password")
+        st.form_submit_button("Sign Up")
+
+        
+
+            
+
 
 with st.sidebar:
-    
+
         
-    with open('style1.css') as f:
+    with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
     selected = option_menu(
-            menu_title= "MAIN MENU",
+            menu_title= "Main Menu",
             options= ["Class Analysis","Student Analysis","Department Login","Progress Report Generation","Attendance","Submit Feedback","About"],
             icons= ["person-workspace","person","briefcase","file-earmark-break","file-bar-graph","envelope-plus","code"],
             menu_icon="list",
@@ -1074,7 +1340,6 @@ if selected == "Class Analysis":
 if selected == "Student Analysis":
     USN_analysis()
 if selected == "Department Login":
-    st.title("DEPARTMENT LOGIN")
     department_login()
 if selected == "Progress Report Generation":
     progress_report()
@@ -1082,3 +1347,9 @@ if selected == "Submit Feedback":
     Submit_Feedback()
 if selected == "About":
     about() 
+if selected == "Attendance":
+    attendance()
+    # dataframe = pd.read_excel("/Users/darshangowda/Downloads/2021.ISE-6.xlsx",engine= 'openpyxl')
+    # filtered_df = dataframe_explorer(dataframe)
+    # st.dataframe(filtered_df, use_container_width=True)
+

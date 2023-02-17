@@ -37,8 +37,6 @@ initial_sidebar_state="expanded")
 
 # Hide default header footer and hamburger menu
 
-add_logo("HD_transparent_picture.png")
-
 
 from deta import Deta
 DETA_KEY = "d0mmbh4h7yn_nrn34JKugUPMyyXjW67tZRSYEhokL2Tj"

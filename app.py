@@ -6,14 +6,14 @@ from streamlit_option_menu import option_menu
 import base64 
 
 import streamlit_authenticator as stauth
-from streamlit_extras.app_logo import add_logo
+# from streamlit_extras.app_logo import add_logo
 
 # import database as db
 from datetime import datetime
 # from google.cloud import firestore
 # from google.cloud.firestore import Client
 
-from streamlit_extras.dataframe_explorer import dataframe_explorer
+# from streamlit_extras.dataframe_explorer import dataframe_explorer
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle,Paragraph,Image
 import io
 from reportlab.lib.styles import getSampleStyleSheet
@@ -77,7 +77,7 @@ def get_img_as_base64(file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-imgg = get_img_as_base64("logo.png")
+# imgg = get_img_as_base64("logo.png")
 
 
 

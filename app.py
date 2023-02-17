@@ -10,8 +10,8 @@ from streamlit_extras.app_logo import add_logo
 
 # import database as db
 from datetime import datetime
-from google.cloud import firestore
-from google.cloud.firestore import Client
+# from google.cloud import firestore
+# from google.cloud.firestore import Client
 
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle,Paragraph,Image

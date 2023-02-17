@@ -1122,7 +1122,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     para = Paragraph(text, style)
     elements.append(para)
 
-    image_path = "/RV_Signature.png"
+    image_path = "RV_Signature.png"
     image = Image(image_path, width=9*inch, height=1.93*inch)
     elements.append(image)
 

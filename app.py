@@ -32,12 +32,12 @@ from email import encoders
 
 
 st.set_page_config(page_title='RVITM-eCampus',
-page_icon='/Users/darshangowda/StreamlitApp/RVlogo.png', 
+page_icon='RVlogo.png', 
 initial_sidebar_state="expanded") 
 
 # Hide default header footer and hamburger menu
 
-add_logo("/Users/darshangowda/Downloads/HD_transparent_picture.png")
+add_logo("HD_transparent_picture.png")
 
 
 from deta import Deta
@@ -77,12 +77,12 @@ def get_img_as_base64(file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-imgg = get_img_as_base64("/Users/darshangowda/Documents/StudentAnalytics.py/logo.png")
+imgg = get_img_as_base64("logo.png")
 
 
 
 
-with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
+with open('style1.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
 
 def get_img_as_base64(file):
@@ -90,7 +90,7 @@ def get_img_as_base64(file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-img = get_img_as_base64("/Users/darshangowda/StreamlitApp/sidebarlogo.jpg")
+img = get_img_as_base64("sidebarlogo.jpg")
 
 page_bg_img = f"""
 
@@ -125,15 +125,14 @@ def student_analysis():
         
         if branch_choice == "CSE":
             try:
-                xls = pd.ExcelFile('/Users/darshangowda/Documents/SavedXLSX/2021.CSE.StudentMarksSheet.xlsx')
+                xls = pd.ExcelFile('2021.CSE.StudentMarksSheet.xlsx')
                 plot_analysis(xls)
             except:
                 st.warning("Data not found / yet to be updated")
 
         if branch_choice == "ISE":
             try:
-                # url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
-                url = "/Users/darshangowda/Documents/SavedXLSX/2021/ISE/2021.ISE.StudentMarksSheet.xlsx"
+                url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
                 xls = pd.ExcelFile(url, engine='openpyxl')
                 plot_analysis(xls)
             except:
@@ -142,14 +141,14 @@ def student_analysis():
 
         if branch_choice == "ECE":
             try:
-                xls = pd.ExcelFile('/Users/darshangowda/Documents/SavedXLSX/2021/ECE/2021.ECE.StudentMarksSheet.xlsx')
+                xls = pd.ExcelFile('2021.ECE.StudentMarksSheet.xlsx')
                 plot_analysis(xls)
             except:
                 st.warning("Data not found / yet to be updated")
 
         if branch_choice == "ME":
             try:
-                xls = pd.ExcelFile('/Users/darshangowda/Documents/SavedXLSX/2021/ME/2021.ME.StudentMarksSheet.xlsx')
+                xls = pd.ExcelFile('2021.ME.StudentMarksSheet.xlsx')
                 plot_analysis(xls)
             except FileNotFoundError:
                 st.warning("Data not found / yet to be updated")
@@ -159,7 +158,8 @@ def student_analysis():
 
         if branch == "ISE":
             try:
-                xls = pd.ExcelFile("/Users/darshangowda/Documents/2020.ISE-7.xlsx")
+                url="https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL/export?format=xlsx"
+                xls = pd.ExcelFile("url, engine='openpyxl'")
                 plot_analysis(xls)
             except FileNotFoundError:
                 st.warning("Data not found / yet to be updated")
@@ -169,7 +169,7 @@ def student_analysis():
 
         if branch == "ISE":
             try:
-                xls = pd.ExcelFile("/Users/darshangowda/Documents/SavedXLSX/2019/ISE/2019.ISE.StudentMarksSheet.xlsx")
+                xls = pd.ExcelFile("2019.ISE.StudentMarksSheet.xlsx")
                 plot_analysis(xls)
             except FileNotFoundError:
                 st.warning("Data not found / yet to be updated")
@@ -478,7 +478,7 @@ def plot_analysis(xls):
         USN = student_data[data.columns[1]].values[0]
         
 
-        with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
+        with open('style1.css') as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
         st.markdown('### STUDENT DETAILS:')
@@ -606,13 +606,13 @@ def USN_analysis():
     st.button("Submit")
     
     if "21IS" in input_str:
-        url = "/Users/darshangowda/Downloads/2021.ISE-6.xlsx"
+        url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
         xls = pd.ExcelFile(url,engine='openpyxl')
         StudentMarks(xls,input_str)
 
     if "20IS" in input_str:
       
-        url = "/Users/darshangowda/Documents/2020.ISE-7.xlsx"
+        url = "https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL/export?format=xlsx"
         xls = pd.ExcelFile(url,engine='openpyxl')
         StudentMarks(xls,input_str)
 
@@ -626,7 +626,7 @@ def StudentMarks(xls,input_str):
         BACK = student_data[data.columns[44]].values[0]
         NAME = student_data[data.columns[2]].values[0] 
         USN = student_data[data.columns[1]].values[0]
-        with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
+        with open('style1.css') as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)   
 
         with pd.ExcelFile(xls) as xlsx:
@@ -858,13 +858,19 @@ def department_login():
 
         batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
         if batch_choice == "2021 Batch":
-            df = pd.read_excel("/Users/darshangowda/Documents/SavedXLSX/2021/ISE/2021.ISE.StudentMarksSheet.xlsx")
+            url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+            xls = pd.ExcelFile(url,engine='openpyxl')
+            df = pd.read_excel(url,engine='openpyxl')
             st.dataframe(df)
         uploaded_file = st.file_uploader("Choose a file", type="xlsx")
         if uploaded_file:
-            with open("/Users/darshangowda/Documents/SavedXLSX/2021/ISE/2021.ISE.StudentMarksSheet.xlsx", "wb") as f:
-                f.write(uploaded_file.read())
-            st.success("File uploaded Successfully!")
+            try:
+                url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
+                with open("2021.ISE-6.xlsx", "wb") as f:
+                    f.write(uploaded_file.read())
+                st.success("File uploaded Successfully!")
+            except:
+                st.error("Upload Failed")
         
 
 
@@ -886,7 +892,7 @@ def Submit_Feedback():
 
     @st.experimental_singleton
     def get_db():
-        db = firestore.Client.from_service_account_json("/Users/darshangowda/Desktop/feedback/key.json")
+        db = firestore.Client.from_service_account_json("key.json")
         return db
 
 
@@ -925,7 +931,7 @@ def Submit_Feedback():
 def about():
 
 
-    with open('/Users/darshangowda/AUTHPROJECT/main.css') as f:
+    with open('main.css') as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
     st.markdown("<div style='text-align:center;'><h1>About RVITM-eCampus</h1></div>", unsafe_allow_html=True,)
@@ -950,12 +956,12 @@ def about():
         st.title("")
         
     
-        with open('/Users/darshangowda/AUTHPROJECT/main.css') as f:
+        with open('main.css') as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     
         col1, col2 = st.columns(2)
         
-        profile_pic = "/Users/darshangowda/Downloads/isehod_img-modified.png"
+        profile_pic = "isehod_img-modified.png"
         with col1:
             st.image(profile_pic, width=230)
     
@@ -974,12 +980,12 @@ def about():
         st.title("")
         
     
-        with open('/Users/darshangowda/AUTHPROJECT/main.css') as f:
+        with open('main.css') as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     
         col1, col2 = st.columns(2)
         
-        profile_pic = "/Users/darshangowda/Downloads/11.-Sahana_Photo-modified.png"
+        profile_pic = "11.-Sahana_Photo-modified.png"
         with col1:
 
             st.image(profile_pic, width=230)
@@ -1022,7 +1028,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
 
     elements = [] 
 
-    image_path = "/Users/darshangowda/Desktop/Header_RV.png"
+    image_path = "Header_RV.png"
     image = Image(image_path, width=8.756*inch, height=1.8*inch)
     image.vAlign = "TOP"
     elements.append(image)
@@ -1118,7 +1124,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     para = Paragraph(text, style)
     elements.append(para)
 
-    image_path = "/Users/darshangowda/Desktop/RV_Signature.png"
+    image_path = "/RV_Signature.png"
     image = Image(image_path, width=9*inch, height=1.93*inch)
     elements.append(image)
 
@@ -1325,7 +1331,7 @@ def attendance():
 with st.sidebar:
 
         
-    with open('/Users/darshangowda/StreamlitApp/style1.css') as f:
+    with open('style1.css') as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
     selected = option_menu(
             menu_title= "Main Menu",
@@ -1349,7 +1355,7 @@ if selected == "About":
     about() 
 if selected == "Attendance":
     attendance()
-    # dataframe = pd.read_excel("/Users/darshangowda/Downloads/2021.ISE-6.xlsx",engine= 'openpyxl')
+    # dataframe = pd.read_excel("2021.ISE-6.xlsx",engine= 'openpyxl')
     # filtered_df = dataframe_explorer(dataframe)
     # st.dataframe(filtered_df, use_container_width=True)
 

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "rvitm-analysisapp",
+  "private_key_id": "db6763519cd2d4b18a2557600811737a8ba459d4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDg7619kHnxZ+NA\nDvN+0rSgx+1jwzNm4N2DEcc0V6FgLdHMyHE/X2l0W3xdzPvQ8sKoVSIe55WCkLcR\nnqtVKtWA+Ohb5FlY/tPB99z3XmPG2UZVrAgBdAMzJ5232OWxO0CLjXQDfQLSooRj\nkdtXh6QKx24bPMQ4jFiIYtM63yZWSTian7JG7tRF/3S0iZkDSEACdvqff6Tppr2+\n1J9j+jlghRud4mZOk8mdGlCYjRdofBIskJCn+W4nZY7lqOwVBsPHhfZo5PyqScEn\nGh0mNhqA86kFRj7xF7KOfa5vdgwkXVSd8a7sbFcrQ5nihR3kG0kSOktDVOaUaA4t\nwMhk76YjAgMBAAECggEAQmY+HnzRonN6X+SJ+HwWmgeqifKLb+kdOp264jakCpI8\nBml9FKoDpTeEZOQnyax/zdUjt1/BgMNbZzYheYilcecIIGgt/9lphS636cXRSlfF\nLXEVA+jNMQKWyjiaxVCqYwekoYr7lFYpIoNh7lq6D/yDAkNT4SV81PXnSM+qr3ls\nCcK/ICJNznEavNBZLDHr1Wn1cVsVsvei1tehp6F0UakL9i1Z7qFOYtAKQwnDk/pf\nJ1tMwQ6HWqhmsBlP/64oXzywy7JtHgkmOkLTIAMHBTGF7fwaOMNgbg7jGbKDmq9c\n28vNo/R+7G4H57fMAFIXztDuYY7xDNFV1asmNyJAsQKBgQD7eQOkDVNpCvduh1vl\n7L0yFlAOyOmXQMrUJmCL9grD9nvGJUeGESieBp6ItCY15Y4914Qqu3daNxcR4/xC\nwyZrKBEjTW1WAhKjbplHnoPOH+y5wO2+msK+xOs8kUi0NzIcCcTlKmGrww5slTgN\nt/Fa1pgi0MfgFHbpU51bQbvIxwKBgQDk/FzD2HXJLEcudTq/SAumRCb9QvR+ljx1\n/P1EG+5Lem1Me68e23ruIjBXFRJKDaKL+rdIrMMtaMEDSRQB8HtGKHQpnhxp9zzN\nfEEIusXQ8P3lIyGVNP2giN+F8oi84Es5Ry2keK1/6YFQRB8YsVztgZ/rR4buJ58s\nAs1+oJ2zxQKBgQC4cTXeaXe4H7cDdnxM06qgxgTKE0phCcC6gbtmbHvQ50Q5PLaM\n+qDT5v74PUmZVllRunTR8tXDcYyWLqWjQgc3qReI0Q1UfAi3njMGeJkr4fZ696po\nlpIn4b63mce9ho5WSkQD4WXp2RMHSRrn1PZNLgA/6OnwzJG66P0NJdVZmQKBgQDX\n9c7DgnXr6o+jmDp0xsz93Y7sEuamMKkLGjP+tVzz4J4OoSPTNWpmBuaSarQaFWv1\nGtsbdpyJSh+nKpftEFIjI+oSiiUAJ4Y3wnVPd18zpOW/4nc80oJVkmFFYi1l/R/V\nAHVihdIULjSgb+7oCfa7pSIe8xGlsMak6mvGflLdhQJ/JS/dvacViQZWG98V/8Oj\nREHSpKeHK9xCE5/obx5/o2nFMLswj95Df6X64vwZ70jFr3Tp1Wh3M2R/iUrMCL/z\n3UEIwrmhCctJJVexnHqtsc8hgSBvP3Uo8z4sk9GrJrUHWIPmz4SRq1CiV7WDpTSw\ncuJEUuVxbcxyKetxGd73AA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-rtdyf@rvitm-analysisapp.iam.gserviceaccount.com",
+  "client_id": "104096176221618060807",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-rtdyf%40rvitm-analysisapp.iam.gserviceaccount.com"
+}

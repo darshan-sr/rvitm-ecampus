@@ -15,7 +15,7 @@ from reportlab.lib.units import inch
 import textwrap
 import datetime
 import zipfile
-
+from io import BytesIO
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
@@ -269,47 +269,66 @@ def progress_pdf(Branch_Choice):
 
    
 
-    test_choice = st.selectbox("Choose the test: ",["PROGRESS REPORT-I","PROGRESS REPORT-II","PROGRESS REPORT-III"])
+   test_choice = st.selectbox("Choose the test: ",["PROGRESS REPORT-I","PROGRESS REPORT-II","PROGRESS REPORT-III"])   
 
-    date_of_generation = st.text_input("Enter the date of Generation  ",placeholder="example: 12th March, 2023")
-    date_of_generation=str(date_of_generation)
+   date_of_generation = st.text_input("Enter the date of Generation  ",placeholder="example: 12th March, 2023")
 
-    submission_d = st.date_input("The Ward Should Sumbit the Signed Progress Report to Counsellor Before:",
-    datetime.date.today())
-    submission_d=str(submission_d)
-    
-    semester = st.selectbox("Select the Semester: ",[" I Semester BE ( ISE ) "," II Semester BE ( ISE ) ", " III Semester BE ( ISE ) "," IV Semester BE ( ISE )", "V Semester BE ( ISE )", "VI Semester BE ( ISE )","VII Semester BE ( ISE )","VII Semester BE ( ISE )"])
+   date_of_generation=str(date_of_generation)  
+   
+   submission_d = st.date_input("The Ward Should Sumbit the Signed Progress Report to Counsellor Before:",
+   datetime.date.today())
 
-    no_of_subjects = st.selectbox("Select the no of Subjects: ",[9,8,7,6,5,4,3,2,1])
-
-    note = st.text_area("General Note (If any*):",placeholder="example: Attendace considered up till 17th March 2023")
-    
-    uploaded_file = st.file_uploader("Upload the Marks Sheet Excel File for the test:", type=["xlsx"])
+   submission_d=str(submission_d)
+   
+   semester = st.selectbox("Select the Semester: ",[" I Semester BE ( ISE ) "," II Semester BE ( ISE ) ", " III Semester BE ( ISE ) "," IV Semester BE ( ISE )", "V Semester BE ( ISE )", "VI Semester BE ( ISE )","VII Semester BE ( ISE )","VII Semester BE ( ISE )"])   
+   no_of_subjects = st.selectbox("Select the no of Subjects: ",[6,7,8,9,5,4,3,2,1])   
+   note = st.text_area("General Note (If any*):",placeholder="example: Attendace considered up till 17th March 2023")
+   
+   uploaded_file = st.file_uploader("Upload the Marks Sheet Excel File for the test:", type=["xlsx"])   
+   if st.button("Submit"):
     
     if uploaded_file is not None:
       tab1, tab2, tab3 = st.tabs(["Generate & Download Report","Preview Progress Report" ,"Confirm & Send Email"])
       with tab1:
         df = pd.read_excel(uploaded_file)
-        st.write("Generating Progress Report...")
-        
-        progress_bar = st.progress(0)
-        
-        # Create a zip file in memory
-        zip_file = io.BytesIO()
-        with zipfile.ZipFile(zip_file, mode='w') as archive:
-            for i in range(2,df.shape[0]):
-                buffer = io.BytesIO()
-                generate_pdf(df, i,Branch_Choice,test_choice,submission_d,date_of_generation,semester,no_of_subjects,note)
-                file_name = f"{df.iloc[i, 1]}.pdf"
 
-                archive.writestr(file_name, buffer.getvalue())
+
+        download_choice = st.selectbox("Choose how you want to download the report:", ["Download all Student's pdf in ZIP format","Download report Individually"])
         
-            b64 = base64.b64encode(zip_file.getvalue()).decode()
-            download_link = f'<a href="data:application/zip;base64,{b64}" download="report.zip">Download all PDFs in zip</a>'
+        if download_choice == "Download all Student's pdf in ZIP format":
+            st.write("Generating Progress Report...")
+            progress_bar = st.progress(0)
+            zip_buffer = BytesIO()
+            with zipfile.ZipFile(zip_buffer, "w") as zip_file:
+                for i in range(2, df.shape[0]):
+                    buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d, date_of_generation, semester, no_of_subjects, note)
+                    file_name = f"{df.iloc[i, 1]}.pdf"
+                    zip_file.writestr(file_name, buffer.getvalue())
+            
+                    progress_value = int((i - 1) / (df.shape[0] - 2) * 100)
+                    progress_bar.progress(progress_value)
+            
+            # Generate a download link for the zip file
+            zip_name = ""+test_choice+"."+semester+".zip"
+            b64 = base64.b64encode(zip_buffer.getvalue()).decode()
+            download_link = f'<a href="data:application/zip;base64,{b64}" download="{zip_name}">click here to begin download</a>'
             st.markdown(download_link, unsafe_allow_html=True)
+
+        if download_choice == "Download report Individually":
+            st.write("Generating Progress Report...")
+            progress_bar = st.progress(0)
+            
+            for i in range(2,df.shape[0]):
+                buffer = generate_pdf(df, i,Branch_Choice,test_choice,submission_d,date_of_generation,semester,no_of_subjects,note)
+                file_name = f"{df.iloc[i, 1]}.pdf"
+    
+            
+                b64 = base64.b64encode(buffer.getvalue()).decode()
+                download_link = f'<a href="data:application/zip;base64,{b64}" download="{file_name}">Download {file_name}</a>'
+                st.markdown(download_link, unsafe_allow_html=True)
                     
-            progress_value = int((i - 1) / (df.shape[0] - 2) * 100)
-            progress_bar.progress(progress_value)
+                progress_value = int((i - 1) / (df.shape[0] - 2) * 100)
+                progress_bar.progress(progress_value)
         
       with tab2:
       
@@ -365,7 +384,7 @@ def progress_pdf(Branch_Choice):
             buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,date_of_generation,semester,no_of_subjects,note)
             file_name = f"{df.iloc[i, 1]}.pdf"
             email = df.iloc[i, 4]
-            father = str(df.iloc[i, 4])
+            father = str(df.iloc[i, 3])
             student_name = str(df.iloc[i, 1])
 
             msg = MIMEMultipart()
@@ -373,8 +392,8 @@ def progress_pdf(Branch_Choice):
             msg['To'] = COMMASPACE.join([email])
             msg['Subject'] = ""+test_choice+"\u00a0 "+semester
             
-            body = "Dear "+father+" ,\n\nHerewith enclosed the "+semester+" "+test_choice+"\u00a0  of your ward "+student_name+".\n\nThanks & Regards,\nRVITM"
-            text = MIMEText(body)
+            body = "Dear <b>"+father+"</b> ,<br><br>Herewith enclosed the <b>"+semester+" "+test_choice+"</b>\u00a0  of your ward <b>"+student_name+"</b><br><br>Thanks & Regards,<br><b>RVITM</b>"
+            text = MIMEText(body,'html')
             msg.attach(text)
         
             # Attach the generated PDF
@@ -438,6 +457,9 @@ def progress_report():
 
         try:
             if username == 'isedept' or username == 'csedept' or username == 'ecedept' or username == 'medept':
+                st.markdown("<div style='text-align:center;'><h2> 📑 PROGRESS REPORT GENERATOR </h2></div>", unsafe_allow_html=True,)
+                st.markdown("<div style='text-align:center;'><h1> </h1></div>", unsafe_allow_html=True,)
+                st.markdown("<div style='text-align:center;'><h1> </h1></div>", unsafe_allow_html=True,)
                 progress_pdf(Branch_Choice)
             else:
                 st.info('Please Logout of Student account to continue!')

@@ -76,10 +76,10 @@ def student_analysis():
 
  
 
-    batch_choice = st.selectbox("Select the year of the Batch", ["2019 Batch", "2020 Batch","2021 Batch", "2022 Batch"])
+    batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
     
     if batch_choice == "2021 Batch":
-        branch_choice = st.selectbox("Select the Branch", ["CSE", "ISE","EC", "ME"])
+        branch_choice = st.selectbox("Select the Branch", ["ISE", "CSE","EC", "ME"])
         
         if branch_choice == "CSE":
           with st.spinner("Loading..."):
@@ -586,8 +586,6 @@ def USN_analysis():
         xls = pd.ExcelFile(url,engine='openpyxl')
         with st.spinner("Loading data..."):
             StudentMarks(xls,input_str)
-
-
 
 
 def StudentMarks(xls,input_str):

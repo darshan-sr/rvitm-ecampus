@@ -111,7 +111,7 @@ background-attachment: fixed;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
-def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generation):  
+def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generation,semester,no_of_subjects,note):  
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0, leftMargin=50, rightMargin=50, bottomMargin=0)
     
@@ -133,13 +133,12 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     bold_style.fontSize = 10
     bold_style.spaceAfter = 1
     bold_style.spaceBefore = 1
-    # bold_style.textTransform = "uppercase"
 
 
     elements = [] 
 
     image_path = "Header_RV.png"
-    image = Image(image_path, width=8.756*inch, height=1.8*inch)
+    image = Image(image_path, width=8*inch, height=1.6445*inch)
     image.vAlign = "TOP"
     elements.append(image)
 
@@ -149,6 +148,17 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     heading = Paragraph(test_choice, bold_times_style)
     elements.append(heading)
 
+    style_sheet = getSampleStyleSheet() #date
+    style = style_sheet['Normal']
+    text = date_of_generation
+    para = Paragraph(text, style)
+    elements.append(para)
+
+    style_sheet = getSampleStyleSheet() #date
+    style = style_sheet['Normal']
+    text = "\u00a0"
+    para = Paragraph(text, style)
+    elements.append(para)
 
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
@@ -156,7 +166,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     para = Paragraph(text, style)
     elements.append(para)
     
-    father = str(df.iloc[row, 4])
+    father = str(df.iloc[row, 3])
     heading = Paragraph("\u00a0 \u00a0 \u00a0Mr/Mrs \u00a0"+father+",", bold_style)
     elements.append(heading)
 
@@ -164,7 +174,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     USN = df.iloc[row,2]
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
-    text = "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0The progress report of your ward "+str(student_name)+","+str(USN)+" studying in III Semester BE ( ISE ) is given below: "
+    text = "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0The progress report of your ward "+str(student_name)+",\u00a0"+str(USN)+" studying in "+str(semester)+" is given below: "
     para = Paragraph(text, style)
     elements.append(para)
 
@@ -172,11 +182,11 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     wrapped_attendance  = textwrap.fill("Attendance Percentage", width=10)
     wrapped_classheld  = textwrap.fill("Classes Held", width=7)
     wrapped_classattended = textwrap.fill("Classes Attended", width=9)
-    wrapped_testmarks = textwrap.fill("Test Marks (Max 40)", width=10)
-    wrapped_assignment = textwrap.fill("Assignment (Max 10)", width=10)
+    wrapped_testmarks = textwrap.fill(str(df.iloc[1,10]), width=10)
+    wrapped_assignment = textwrap.fill(str(df.iloc[1,11]), width=10)
     data = [[wrapped_sl,"Subject Name",wrapped_classheld,wrapped_classattended,wrapped_attendance,wrapped_testmarks,wrapped_assignment]]
 
-    for i in range(6):
+    for i in range(no_of_subjects):
         subject = df.iloc[0, 8 + i * 4]
         try:
            classesheld = int(df.iloc[row, 8 + i * 4])
@@ -196,7 +206,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
 
         data.append([str(i+1), wrapped_subject, classesheld, classattended, "{}%".format(attendance), marks, assignment])
 
-    table = Table(data, colWidths=None, rowHeights=None, style=None, splitByRow=1, repeatRows=0, repeatCols=0, rowSplitRange=None, spaceBefore=20, spaceAfter=20, cornerRadii=[1.5,1.5,1.5,1.5])
+    table = Table(data, splitByRow=1, spaceBefore=10, spaceAfter=10, cornerRadii=[1.5,1.5,1.5,1.5])
     
 
     table.setStyle(TableStyle([      
@@ -207,8 +217,8 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     ('fontsize', (-1,-1), (-1,-1), 14),
     ('ALIGNMENT', (1, 1), (1, -1), 'LEFT'),
     ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-    ('BOTTOMPADDING', (0, 0), (-1, -1), 15),
-    ('BOTTOMPADDING', (0, 1), (-1, -1), 15),
+    ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+    ('BOTTOMPADDING', (0, 1), (-1, -1), 10),
     ('BACKGROUND', (0, 1), (-1, -1), '#FFFFFF'),
     ('GRID', (0, 0), (-1, -1), 1, "black")
   ]))
@@ -217,7 +227,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
 
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
-    text = "Remarks : Kindly advise your ward, if the attendance percentage is less than 85% and Test marks are less than 40%. "
+    text = "Remarks:\u00a0"+str(df.iloc[row,7])+""
     para = Paragraph(text, style)
     elements.append(para)
 
@@ -226,8 +236,20 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     para = Paragraph(text, style)
     elements.append(para)
 
+    style_sheet = getSampleStyleSheet()
+    style = style_sheet['Normal']
+    text = "Note:\u00a0"+str(note)+""
+    para = Paragraph(text, style)
+    elements.append(para)
 
-    counsellor_mail = str(df.iloc[row,7])
+
+    style = style_sheet['Normal']
+    text = "\u00a0 "
+    para = Paragraph(text, style)
+    elements.append(para)
+
+
+    counsellor_mail = str(df.iloc[row,6])
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
     text = "Please download, sign and send the scanned copy of the report to “"+counsellor_mail+"” on or before "+submission_d+"."
@@ -235,7 +257,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     elements.append(para)
 
     image_path = "RV_Signature.png"
-    image = Image(image_path, width=9*inch, height=1.93*inch)
+    image = Image(image_path, width=8.5*inch, height=1.7155*inch)
     elements.append(image)
 
     doc.build(elements)
@@ -249,13 +271,18 @@ def progress_pdf():
 
     test_choice = st.selectbox("Choose the test: ",["PROGRESS REPORT-I","PROGRESS REPORT-II","PROGRESS REPORT-III"])
 
-    date_of_generation = st.date_input("Date of Generation:",datetime.date.today())
+    date_of_generation = st.text_input("Enter the date of Generation  ",placeholder="example: 12th March, 2023")
+    date_of_generation=str(date_of_generation)
 
     submission_d = st.date_input("The Ward Should Sumbit the Signed Progress Report to Counsellor Before:",
     datetime.date.today())
     submission_d=str(submission_d)
     
-    semester = st.selectbox("Select the Semester: ",["1st Semester","2nd Semester", "3rd Semester"," 4th Semester", "5th Semester", "6th Semester","7th Semester","8th Semester"])
+    semester = st.selectbox("Select the Semester: ",[" I Semester BE ( ISE ) "," II Semester BE ( ISE ) ", " III Semester BE ( ISE ) "," IV Semester BE ( ISE )", "V Semester BE ( ISE )", "VI Semester BE ( ISE )","VII Semester BE ( ISE )","VII Semester BE ( ISE )"])
+
+    no_of_subjects = st.selectbox("Select the no of Subjects: ",[9,8,7,6,5,4,3,2,1])
+
+    note = st.text_area("General Note (If any*):",placeholder="example: Attendace considered up till 17th March 2023")
     
     uploaded_file = st.file_uploader("Upload the Marks Sheet Excel File for the test:", type=["xlsx"])
     
@@ -272,8 +299,8 @@ def progress_pdf():
         with zipfile.ZipFile(zip_file, mode='w') as archive:
             for i in range(2,df.shape[0]):
                 buffer = io.BytesIO()
-                generate_pdf(df, i,Branch_Choice,test_choice,submission_d,date_of_generation)
-                file_name = f"{df.iloc[i, 2]}.pdf"
+                generate_pdf(df, i,Branch_Choice,test_choice,submission_d,date_of_generation,semester,no_of_subjects,note)
+                file_name = f"{df.iloc[i, 1]}.pdf"
 
                 archive.writestr(file_name, buffer.getvalue())
         
@@ -295,8 +322,8 @@ def progress_pdf():
         # Generate the PDFs for each student and store it in a dictionary with the student name as the key
         pdfs = {}
         for i in range(2, df.shape[0]):
-            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d, date_of_generation)
-            file_name = f"{df.iloc[i, 2]}.pdf"
+            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d, date_of_generation,semester,no_of_subjects,note)
+            file_name = f"{df.iloc[i, 1]}.pdf"
          
             b64 = base64.b64encode(buffer.getvalue()).decode()
             pdfs[file_name] = b64
@@ -335,9 +362,9 @@ def progress_pdf():
         progress_bar = st.progress(0)
 
         for i in range(2, df.shape[0]):
-            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,date_of_generation)
-            file_name = f"{df.iloc[i, 2]}.pdf"
-            email = df.iloc[i, 3]
+            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,date_of_generation,semester,no_of_subjects,note)
+            file_name = f"{df.iloc[i, 1]}.pdf"
+            email = df.iloc[i, 4]
             father = str(df.iloc[i, 4])
             student_name = str(df.iloc[i, 1])
 

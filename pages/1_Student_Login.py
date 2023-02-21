@@ -348,7 +348,7 @@ def attendance():
 
         try:
 
-            if usernames != 'isedept' or 'csedept' or 'ecedept' or 'medept' :
+            if '1RF' in usernames :
     
           
                 st.sidebar.success("Welcome "+namess+"")

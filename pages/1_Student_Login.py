@@ -346,29 +346,41 @@ def attendance():
 
     if authentication_statuss:
 
-      
-        st.sidebar.success("Welcome "+namess+"")
-        student_authenticator.logout("Logout", "sidebar")
-        tab1, tab2 = st.tabs(["Marks Analysis", "Attendance"])
+        try:
 
-        with tab1:
-             input_str = usernames
+            if usernames != 'isedept' or 'csedept' or 'ecedept' or 'medept' :
+    
+          
+                st.sidebar.success("Welcome "+namess+"")
+                student_authenticator.logout("Logout", "sidebar")
+                tab1, tab2 = st.tabs(["Marks Analysis", "Attendance"])
+        
+                with tab1:
+        
+                     input_str = usernames
+        
+                     if "21IS" in input_str:
+                         url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+                         xls = pd.ExcelFile(url, engine='openpyxl')
+                         with st.spinner("Loading data..."):
+                             StudentMarks(xls, input_str)
+                 
+                     if "20IS" in input_str:
+                       
+                         url = "https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL/export?format=xlsx"
+                         xls = pd.ExcelFile(url,engine='openpyxl')
+                         with st.spinner("Loading data..."):
+                             StudentMarks(xls,input_str)
+        
+                with tab2:
+                    st.info("Coming Soon...")
+    
+            else:
+                st.info('Please logout of Dept Account to sign in as student')
 
-             if "21IS" in input_str:
-                 url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
-                 xls = pd.ExcelFile(url, engine='openpyxl')
-                 with st.spinner("Loading data..."):
-                     StudentMarks(xls, input_str)
-         
-             if "20IS" in input_str:
-               
-                 url = "https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL/export?format=xlsx"
-                 xls = pd.ExcelFile(url,engine='openpyxl')
-                 with st.spinner("Loading data..."):
-                     StudentMarks(xls,input_str)
+        except Exception as e:
+            st.info('Please logout of Department Account to login in as a student!')
 
-        with tab2:
-            st.info("Coming Soon...")
 
 
 
@@ -409,6 +421,5 @@ def attendance():
                     insert_user(username, name, email, hash_password)
                 st.success("You have successfully signed up, Please login to continue")
     
-
 
 attendance()

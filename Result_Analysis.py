@@ -652,7 +652,7 @@ def StudentMarks(xls,input_str):
 
 
 
-        sheet_name = st.selectbox("Select the semester", xls.sheet_names)
+        sheet_name = st.selectbox("Select the semester:", xls.sheet_names,key='USN')
         data = pd.read_excel(xls, sheet_name=sheet_name)
     
         student_data = data.loc[data['USN'] == input_str]

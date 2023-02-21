@@ -110,111 +110,118 @@ def department_login():
 
 
     if authentication_status:
-     with st.spinner("Loading..."):
-      st.sidebar.success("Welcome "+username+"")
-      authenticator.logout("Logout", "sidebar")
+        try:
+            if username == 'isedept' or username == 'csedept' or username == 'ecedept' or username == 'medept':
+                 with st.spinner("Loading..."):
+                  st.sidebar.success("Welcome "+username+"")
+                  authenticator.logout("Logout", "sidebar")
+            
+                  if username == "isedept":
+                    
+            
+                    batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
+                    if batch_choice == "2021 Batch":
+                        url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+                        xls = pd.ExcelFile(url,engine='openpyxl')
+                        sheet_name = st.selectbox("Select a sheet", xls.sheet_names)
+                        df = pd.read_excel(xls, sheet_name=sheet_name)
+                        st.dataframe(df)
+                        st.markdown("[Update on this Google sheet](https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P)")
+                        uploaded_file = st.file_uploader("Choose a file", type="xlsx")
+                        if uploaded_file:
+                            try:
+                                url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
+                                with open("https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P", "wb") as f:
+                                    f.write(uploaded_file.read())
+                                st.success("File uploaded Successfully!")
+                            except:
+                                st.error("Upload Failed")
+                    if batch_choice == "2020 Batch":
+                        url = "https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL/export?format=xlsx"
+                        xls = pd.ExcelFile(url,engine='openpyxl')
+                        sheet_name = st.selectbox("Select a sheet", xls.sheet_names)
+                        df = pd.read_excel(xls, sheet_name=sheet_name)
+                        st.dataframe(df)
+                        st.markdown("[Update on this Google sheet](https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL)")
+                        uploaded_file = st.file_uploader("Choose a file", type="xlsx")
+                        if uploaded_file:
+                         try:
+                            url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
+                            with open("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL", "wb") as f:
+                                f.write(uploaded_file.read())
+                            st.success("File uploaded Successfully!")
+                         except:
+                            st.error("Upload Failed")
+            
+                  if username == "csedept":
+                    
+            
+                    batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
+                    if batch_choice == "2021 Batch":
+                        url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+                        xls = pd.ExcelFile(url,engine='openpyxl')
+                        df = pd.read_excel(url,engine='openpyxl')
+                        st.dataframe(df)
+                    uploaded_file = st.file_uploader("Choose a file", type="xlsx")
+                    if uploaded_file:
+                        try:
+                            url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
+                            with open("2021.ISE-6.xlsx", "wb") as f:
+                                f.write(uploaded_file.read())
+                            st.success("File uploaded Successfully!")
+                        except:
+                            st.error("Upload Failed")
+                    
+                  if username == "ecedept":
+                    
+            
+                    batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
+                    if batch_choice == "2021 Batch":
+                        url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+                        xls = pd.ExcelFile(url,engine='openpyxl')
+                        df = pd.read_excel(url,engine='openpyxl')
+                        st.dataframe(df)
+                    uploaded_file = st.file_uploader("Choose a file", type="xlsx")
+                    if uploaded_file:
+                        try:
+                            url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
+                            with open("2021.ISE-6.xlsx", "wb") as f:
+                                f.write(uploaded_file.read())
+                            st.success("File uploaded Successfully!")
+                        except:
+                            st.error("Upload Failed")
+            
+                  if username == "medept":
+                    
+            
+                    batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
+                    if batch_choice == "2021 Batch":
+                        url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
+                        xls = pd.ExcelFile(url,engine='openpyxl')
+                        df = pd.read_excel(url,engine='openpyxl')
+                        st.dataframe(df)
+                    uploaded_file = st.file_uploader("Choose a file", type="xlsx")
+                    if uploaded_file:
+                        try:
+                            url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
+                            with open("2021.ISE-6.xlsx", "wb") as f:
+                                f.write(uploaded_file.read())
+                            st.success("File uploaded Successfully!")
+                        except:
+                            st.error("Upload Failed")
+            else:
+                st.info('Please Logout of Student account to continue!')
+        except Exception as e:
+            st.info('Please Logout of Student account to continue!', e)           
+                
+            
 
-      if username == "isedept":
+
         
 
-        batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
-        if batch_choice == "2021 Batch":
-            url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
-            xls = pd.ExcelFile(url,engine='openpyxl')
-            sheet_name = st.selectbox("Select a sheet", xls.sheet_names)
-            df = pd.read_excel(xls, sheet_name=sheet_name)
-            st.dataframe(df)
-            st.markdown("[Update on this Google sheet](https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P)")
-            uploaded_file = st.file_uploader("Choose a file", type="xlsx")
-            if uploaded_file:
-                try:
-                    url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
-                    with open("https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P", "wb") as f:
-                        f.write(uploaded_file.read())
-                    st.success("File uploaded Successfully!")
-                except:
-                    st.error("Upload Failed")
-        if batch_choice == "2020 Batch":
-            url = "https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL/export?format=xlsx"
-            xls = pd.ExcelFile(url,engine='openpyxl')
-            sheet_name = st.selectbox("Select a sheet", xls.sheet_names)
-            df = pd.read_excel(xls, sheet_name=sheet_name)
-            st.dataframe(df)
-            st.markdown("[Update on this Google sheet](https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL)")
-            uploaded_file = st.file_uploader("Choose a file", type="xlsx")
-            if uploaded_file:
-             try:
-                url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
-                with open("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL", "wb") as f:
-                    f.write(uploaded_file.read())
-                st.success("File uploaded Successfully!")
-             except:
-                st.error("Upload Failed")
-
-      if username == "csedept":
-        
-
-        batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
-        if batch_choice == "2021 Batch":
-            url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
-            xls = pd.ExcelFile(url,engine='openpyxl')
-            df = pd.read_excel(url,engine='openpyxl')
-            st.dataframe(df)
-        uploaded_file = st.file_uploader("Choose a file", type="xlsx")
-        if uploaded_file:
-            try:
-                url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
-                with open("2021.ISE-6.xlsx", "wb") as f:
-                    f.write(uploaded_file.read())
-                st.success("File uploaded Successfully!")
-            except:
-                st.error("Upload Failed")
-        
-      if username == "ecedept":
-        
-
-        batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
-        if batch_choice == "2021 Batch":
-            url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
-            xls = pd.ExcelFile(url,engine='openpyxl')
-            df = pd.read_excel(url,engine='openpyxl')
-            st.dataframe(df)
-        uploaded_file = st.file_uploader("Choose a file", type="xlsx")
-        if uploaded_file:
-            try:
-                url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
-                with open("2021.ISE-6.xlsx", "wb") as f:
-                    f.write(uploaded_file.read())
-                st.success("File uploaded Successfully!")
-            except:
-                st.error("Upload Failed")
-
-      if username == "medept":
-        
-
-        batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
-        if batch_choice == "2021 Batch":
-            url = "https://docs.google.com/spreadsheets/d/1LFIKxpYN1tNYqD03U6RYb58Slq32lk2P/export?format=xlsx"
-            xls = pd.ExcelFile(url,engine='openpyxl')
-            df = pd.read_excel(url,engine='openpyxl')
-            st.dataframe(df)
-        uploaded_file = st.file_uploader("Choose a file", type="xlsx")
-        if uploaded_file:
-            try:
-                url = ("https://docs.google.com/spreadsheets/d/1bL2IYl-hJOwD9WUETCB98q4BgL9rAwyL")
-                with open("2021.ISE-6.xlsx", "wb") as f:
-                    f.write(uploaded_file.read())
-                st.success("File uploaded Successfully!")
-            except:
-                st.error("Upload Failed")
-
-    
-
-
-
-        
+department_login()
 
             
 
 
-department_login()
+

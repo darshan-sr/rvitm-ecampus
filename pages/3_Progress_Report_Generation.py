@@ -174,7 +174,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     USN = df.iloc[row,2]
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
-    text = "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0The progress report of your ward "+str(student_name)+",\u00a0"+str(USN)+" studying in "+str(semester)+" is given below: "
+    text = "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0The progress report of your ward <b>"+str(student_name)+",\u00a0"+str(USN)+"</b> studying in <b>"+str(semester)+"</b> is given below: "
     para = Paragraph(text, style)
     elements.append(para)
 
@@ -227,7 +227,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
 
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
-    text = "Remarks:\u00a0"+str(df.iloc[row,7])+""
+    text = "<b>Remarks:</b>\u00a0"+str(df.iloc[row,7])+""
     para = Paragraph(text, style)
     elements.append(para)
 
@@ -238,7 +238,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
 
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
-    text = "Note:\u00a0"+str(note)+""
+    text = "<b>Note:</b>\u00a0"+str(note)+""
     para = Paragraph(text, style)
     elements.append(para)
 
@@ -265,9 +265,9 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     buffer.seek(0)
     return buffer
 
-def progress_pdf():
+def progress_pdf(Branch_Choice):
 
-    Branch_Choice = st.selectbox("Choose the Branch for which you're generating Progress Report:",["INFORMATION SCIENCE & ENGINEERING","COMPUTER SCIENCE & ENGINEERING","ELECTRONICS & COMMUNICATION ENGINEERING","MECHANICAL ENGINEERING"])
+   
 
     test_choice = st.selectbox("Choose the test: ",["PROGRESS REPORT-I","PROGRESS REPORT-II","PROGRESS REPORT-III"])
 
@@ -417,10 +417,33 @@ def progress_report():
 
 
     if authentication_status:
-      st.sidebar.success("Welcome "+username+"")
-      authenticator.logout("Logout", "sidebar")
 
-      progress_pdf()
+        if username == 'isedept':
+            Branch_Choice = 'INFORMATION SCIENCE & ENGINEERING'
+        elif username == 'csedept':
+            Branch_Choice = 'COMPUTER SCIENCE & ENGINEERING'
+        elif username == 'ecedept':
+            Branch_Choice = 'ELECTRONICS & COMMUNICATION ENGINEERING'
+        elif username == 'medept' :
+            Branch_Choice = 'MECHANICAL ENGINEERING'
+
+
+ 
+        co1 , co2 = st.columns(2)
+
+        with co1:
+            st.sidebar.success("Welcome "+username+"")
+        with co2:
+            authenticator.logout("Logout", "sidebar")
+
+        try:
+            if username == 'isedept' or username == 'csedept' or username == 'ecedept' or username == 'medept':
+                progress_pdf(Branch_Choice)
+            else:
+                st.info('Please Logout of Student account to continue!')
+        except Exception as e:
+            st.info('Please Logout of Student account to continue!', e)
+   
     
 
 

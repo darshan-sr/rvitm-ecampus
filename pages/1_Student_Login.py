@@ -9,7 +9,7 @@ import streamlit_authenticator as stauth
 
 from datetime import datetime
 from deta import Deta
-
+import random
 
 import textwrap
 import datetime
@@ -22,6 +22,9 @@ from email.mime.text import MIMEText
 from email.utils import COMMASPACE
 from email import encoders
 from pathlib import Path
+
+
+from streamlit_extras.switch_page_button import switch_page
 
 
 st.set_page_config(page_title='E-Campus Student Login',
@@ -305,7 +308,8 @@ def StudentMarks(xls,input_str):
 
     
 def attendance():
- 
+
+
  
  selected = option_menu(
         menu_title=None,
@@ -315,6 +319,7 @@ def attendance():
     )
 
  if selected == "Login":
+
 
     DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
     det = Deta(DETAA)
@@ -377,14 +382,18 @@ def attendance():
     
             else:
                 st.info('Please logout of Dept Account to sign in as student')
+                student_authenticator.logout("Logout","main")
 
         except Exception as e:
             st.info('Please logout of Department Account to login in as a student!')
+            student_authenticator.logout("Logout","sidebar")
 
 
 
 
  if selected == "Signup":
+
+    st.markdown("<div style='text-align:center;'><h1>          </h1></div>", unsafe_allow_html=True)
     DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
     det = Deta(DETAA)
     dt = det.Base("students_db")
@@ -396,30 +405,53 @@ def attendance():
 
     
 
-    with st.form("signup_form"):
+    with st.form("my_form"):
         col1, col2 = st.columns(2)
         with col1: 
-         firstname = st.text_input("First Name")
+            firstname = st.text_input("First Name")
         with col2:
-         lastname = st.text_input("Last Name")
+            lastname = st.text_input("Last Name")
         name = ''+firstname+'\u00a0'+lastname+''
-        username = st.text_input("Enter your USN",placeholder="1RF00XX000 (Enter in caps)")
-        email = st.text_input("Enter College Email ID:",placeholder="example.rvitm@rvei.edu.in")
+        username = st.text_input("Enter your USN", placeholder="1RF00XX000 (Enter in caps)")
+        email = st.text_input("Enter College Email ID:", placeholder="example.rvitm@rvei.edu.in")
         password = st.text_input("Password", type="password")
         confirm_password = st.text_input("Confirm Password", type="password")
-    
-        if st.form_submit_button("Sign Up"):
+        
+        if st.form_submit_button("Send OTP"):
             if password != confirm_password:
                 st.error("Passwords do not match.")
             else:
-                usernames = [username]
-                names = [name]
-                passwords = [confirm_password]
-                email = [email]
-                hashed_passwords = stauth.Hasher(passwords).generate()
-                for (username, name, email, hash_password) in zip(usernames, names, email, hashed_passwords):
-                    insert_user(username, name, email, hash_password)
-                st.success("You have successfully signed up, Please login to continue")
-    
+                # Generate a 6-digit random OTP
+                otp = str(random.randint(100000, 999999))
+                # Set up the email message
+                sender_email = "rvit21bis025.rvitm@rvei.edu.in" 
+                receiver_email = email
+                message = f"Subject: OTP Verification\n\nYour OTP is: {otp}"
+                # Send the email
+                with smtplib.SMTP("smtp.gmail.com", 587) as server:
+                    server.starttls()
+                    server.login(sender_email, "rsst123456") 
+                    server.sendmail(sender_email, receiver_email, message)
+                # Store the OTP for later use
+                st.session_state["otp"] = otp
+                st.success("OTP sent to email.")
+        
+        # Check if the OTP has been sent and received before displaying the OTP form
+        if "otp" in st.session_state:
+            entered_otp = st.text_input("Enter OTP")
+            if st.form_submit_button("Submit"):
+                if entered_otp == st.session_state["otp"]:
+                    # Create the user
+                    usernames = [username]
+                    names = [name]
+                    passwords = [confirm_password]
+                    email = [email]
+                    hashed_passwords = stauth.Hasher(passwords).generate()
+                    for (username, name, email, hash_password) in zip(usernames, names, email, hashed_passwords):
+                        insert_user(username, name, email, hash_password)
+                    st.success("You have successfully signed up, Please login to continue. (Your Username is your USN)")
+                else:
+                    st.error("Incorrect OTP. Please try again.")
+
 
 attendance()

@@ -6,6 +6,15 @@ from streamlit_option_menu import option_menu
 import base64 
 from deta import Deta
 import streamlit_authenticator as stauth
+from streamlit_extras.switch_page_button import switch_page
+import random
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.utils import COMMASPACE
+from email import encoders
 
 st.set_page_config(page_title='RVITM-eCampus',
 page_icon='RVlogo.png', 
@@ -76,10 +85,10 @@ def student_analysis():
 
  
 
-    batch_choice = st.selectbox("Select the year of the Batch", ["2021 Batch", "2020 Batch","2019 Batch", "2022 Batch"])
+    batch_choice = st.selectbox("Select the year of the Batch", ["2019 Batch", "2020 Batch","2021 Batch", "2022 Batch"])
     
     if batch_choice == "2021 Batch":
-        branch_choice = st.selectbox("Select the Branch", ["ISE", "CSE","EC", "ME"])
+        branch_choice = st.selectbox("Select the Branch", ["CSE", "ISE","EC", "ME"])
         
         if branch_choice == "CSE":
           with st.spinner("Loading..."):
@@ -801,9 +810,7 @@ def StudentMarks(xls,input_str):
                 st.plotly_chart(fig)
 
 
-st.markdown("<div style='text-align:center;'><h1>RESULT ANALYSIS 📈</h1></div>", unsafe_allow_html=True,)
-st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
-st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
+
 
    
 
@@ -816,10 +823,15 @@ st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html
 def loginpage():
  
 
-
- tb1, tb2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Login\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Signup\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
-
- with tb1:
+ 
+#  tb1, tb2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Login\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Signup\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
+ selected = option_menu(
+        menu_title=None,
+        options=["Login","Signup"],
+        icons=["person-workspace","person"],
+        orientation="horizontal",
+    ) 
+ if selected == 'Login':
 
     DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
     det = Deta(DETAA)
@@ -850,10 +862,16 @@ def loginpage():
 
 
     if authentication_statuss:
+        st.markdown("<div style='text-align:center;'><h1>RESULT ANALYSIS 📈</h1></div>", unsafe_allow_html=True,)
+        st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
+        st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
+
 
         try:
 
             if '1RF' not in usernames :
+                st.sidebar.success("Welcome "+namess+"")
+                student_authenticator.logout("Logout", "sidebar")
     
                 tab1, tab2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Semester Results Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Student Performance Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
                  
@@ -866,7 +884,7 @@ def loginpage():
 
     
             else:
-                st.info('Please logout of Dept Account to sign in as student')
+                st.info('Please logout of Student Account to sign in as student')
 
         except Exception as e:
             st.info('Please logout of Department Account to login in as a student!')
@@ -874,7 +892,7 @@ def loginpage():
 
 
 
- with tb2:
+ elif selected == 'Signup':
     DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
     det = Deta(DETAA)
     dt = det.Base("faculty_db")
@@ -885,29 +903,52 @@ def loginpage():
         return dt.put({"key": username, "name": name, "password": password})
 
     
-
-    with st.form("signup_form"):
+    with st.form("my_form"):
         col1, col2 = st.columns(2)
         with col1: 
             firstname = st.text_input("First Name")
         with col2:
             lastname = st.text_input("Last Name")
         name = ''+firstname+'\u00a0'+lastname+''
-        username = st.text_input("Enter College Email ID:",placeholder="example.rvitm@rvei.edu.in")
+        username = st.text_input("Enter College/Work Email ID:", placeholder="example.rvitm@rvei.edu.in")
         password = st.text_input("Password", type="password")
         confirm_password = st.text_input("Confirm Password", type="password")
-    
-        if st.form_submit_button("Sign Up"):
+        
+        if st.form_submit_button("Send OTP"):
             if password != confirm_password:
                 st.error("Passwords do not match.")
             else:
-                usernames = [username]
-                names = [name]
-                passwords = [confirm_password]
-                hashed_passwords = stauth.Hasher(passwords).generate()
-                for (username, name, hash_password) in zip(usernames, names, hashed_passwords):
-                    insert_user(username, name, hash_password)
-                st.success("You have successfully signed up, Please login to continue")
+                # Generate a 6-digit random OTP
+                otp = str(random.randint(100000, 999999))
+                # Set up the email message
+                sender_email = "rvit21bis025.rvitm@rvei.edu.in" 
+                receiver_email = username
+                message = f"Subject: OTP Verification\n\nYour OTP is: {otp}"
+                # Send the email
+                with smtplib.SMTP("smtp.gmail.com", 587) as server:
+                    server.starttls()
+                    server.login(sender_email, "rsst123456") 
+                    server.sendmail(sender_email, receiver_email, message)
+                # Store the OTP for later use
+                st.session_state["otp"] = otp
+                st.success("OTP sent to email.")
+        
+        # Check if the OTP has been sent and received before displaying the OTP form
+        if "otp" in st.session_state:
+            entered_otp = st.text_input("Enter OTP")
+            if st.form_submit_button("Submit"):
+                if entered_otp == st.session_state["otp"]:
+                    # Create the user
+                    usernames = [username]
+                    names = [name]
+                    passwords = [confirm_password]
+                    hashed_passwords = stauth.Hasher(passwords).generate()
+                    for (username, name,  hash_password) in zip(usernames, names,  hashed_passwords):
+                        insert_user(username, name, hash_password)
+                 
+                    st.success("You have successfully signed up, Please login to continue!")
+                else:
+                    st.error("Incorrect OTP. Please try again.")
 
 
 

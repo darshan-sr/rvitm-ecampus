@@ -4,7 +4,7 @@ div.element-container.css-zvqkad.e1tzin5v3{
     border: 1px solid #CCCCCC;
     padding: 5% 5% 5% 10%;
     border-radius: 5px;
-    border-left: 0.4rem solid #b72271 !important;
+    border-left: 0.3rem solid #b72271 !important;
     box-shadow: 0 0.05rem 0.75rem 0 rgba(58, 59, 69, 0.15) !important;
     
 }
@@ -14,7 +14,7 @@ div.css-90qg9c{
     border: 1px solid #CCCCCC;
     padding: 5% 5% 5% 10%;
     border-radius: 5px;
-    border-left: 0.4rem solid #b72271 !important;
+    border-left: 0.3rem solid #b72271 !important;
     box-shadow: 0 0.05rem 0.75rem 0 rgba(58, 59, 69, 0.15) !important;
     
 }
@@ -32,7 +32,7 @@ div.css-12ttj6m.epcbefy1{
     border: 1px solid #CCCCCC;
     padding: 5% 5% 5% 5%;
     border-radius: 10px;
-    border-left: 0.5rem solid #b72271 !important;
+    border-left: 0.3rem solid #b72271 !important;
     box-shadow: 0 0.05rem 0.75rem 0 rgba(58, 59, 69, 0.15) !important;
 }
 
@@ -143,18 +143,3 @@ div.css-jtjz89{
     padding: 100px;
 }
 
-
-
-
-
-/* .css-113bm4q.edgvbvh10::before {
-    content: ">";
-    display: block;
-    font-size: 16px;
-    color: #000;
-    position: absolute;
-    padding-left: 90px;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 10px;
-} */

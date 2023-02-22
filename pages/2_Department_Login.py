@@ -340,23 +340,23 @@ def progress_pdf(Branch_Choice):
 
    
 
-   test_choice = st.selectbox("Choose the test: ",["PROGRESS REPORT-I","PROGRESS REPORT-II","PROGRESS REPORT-III"])   
+    test_choice = st.selectbox("Choose the test: ",["PROGRESS REPORT-I","PROGRESS REPORT-II","PROGRESS REPORT-III"])   
 
-   date_of_generation = st.text_input("Enter the date of Generation  ",placeholder="example: 12th March, 2023")
+    date_of_generation = st.text_input("Enter the date of Generation  ",placeholder="example: 12th March, 2023")
 
-   date_of_generation=str(date_of_generation)  
-   
-   submission_d = st.date_input("The Ward Should Sumbit the Signed Progress Report to Counsellor Before:",
-   datetime.date.today())
+    date_of_generation=str(date_of_generation)  
+    
+    submission_d = st.date_input("The Ward Should Sumbit the Signed Progress Report to Counsellor Before:",
+    datetime.date.today())
 
-   submission_d=str(submission_d)
-   
-   semester = st.selectbox("Select the Semester: ",[" I Semester BE ( ISE ) "," II Semester BE ( ISE ) ", " III Semester BE ( ISE ) "," IV Semester BE ( ISE )", "V Semester BE ( ISE )", "VI Semester BE ( ISE )","VII Semester BE ( ISE )","VII Semester BE ( ISE )"])   
-   no_of_subjects = st.selectbox("Select the no of Subjects: ",[6,7,8,9,5,4,3,2,1])   
-   note = st.text_area("General Note (If any*):",placeholder="example: Attendace considered up till 17th March 2023")
-   
-   uploaded_file = st.file_uploader("Upload the Marks Sheet Excel File for the test:", type=["xlsx"])   
-   if st.button("Submit"):
+    submission_d=str(submission_d)
+    
+    semester = st.selectbox("Select the Semester: ",[" I Semester BE ( ISE ) "," II Semester BE ( ISE ) ", " III Semester BE ( ISE ) "," IV Semester BE ( ISE )", "V Semester BE ( ISE )", "VI Semester BE ( ISE )","VII Semester BE ( ISE )","VII Semester BE ( ISE )"])   
+    no_of_subjects = st.selectbox("Select the no of Subjects: ",[6,7,8,9,5,4,3,2,1])   
+    note = st.text_area("General Note (If any*):",placeholder="example: Attendace considered up till 17th March 2023")
+    
+    uploaded_file = st.file_uploader("Upload the Marks Sheet Excel File for the test:", type=["xlsx"])   
+
     
     if uploaded_file is not None:
       tab1, tab2, tab3 = st.tabs(["Generate & Download Report","Preview Progress Report" ,"Confirm & Send Email"])

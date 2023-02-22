@@ -4,8 +4,8 @@ import plotly.graph_objs as go
 import plotly.express as px
 from streamlit_option_menu import option_menu
 import base64 
-
-
+from deta import Deta
+import streamlit_authenticator as stauth
 
 st.set_page_config(page_title='RVITM-eCampus',
 page_icon='RVlogo.png', 
@@ -117,6 +117,7 @@ def student_analysis():
                 plot_analysis(xls)
             except FileNotFoundError:
                 st.warning("Data not found / yet to be updated")
+                
 
     if batch_choice =="2020 Batch":
         branch = st.selectbox("Select the Branch", ["CSE", "ISE","EC", "ME"])
@@ -806,49 +807,108 @@ st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html
 
    
 
-tab1, tab2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Semester Results Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Student Performance Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
-
-with tab1:
-    student_analysis()
-
-
-with tab2:
-    USN_analysis()
 
 
 
 
 
 
+def loginpage():
+ 
 
 
-# with st.sidebar:
+ tb1, tb2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Login\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Signup\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
 
-        
-#     with open('style1.css') as f:
-#         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
-#     selected = option_menu(
-#             menu_title= "RVITM eCampus",
-#             options= ["Result Analysis","Student Analysis","Department Login","Progress Report Generation","Attendance","Submit Feedback","About"],
-#             icons= ["person-workspace","person","briefcase","file-earmark-break","file-bar-graph","envelope-plus","code"],
-#             menu_icon="list",
-#             default_index=0,
-#             orientation="horizantal",
-#         )
-# if selected == "Result Analysis":
-#       student_analysis()
-# if selected == "Student Analysis":
-#      USN_analysis()
-# if selected == "Department Login":
-#      department_login()
-# if selected == "Progress Report Generation":
-#     progress_report()
-# if selected == "Submit Feedback":
-#      Submit_Feedback()
-# if selected == "About":
-#      about() 
-# if selected == "Attendance":
-#      attendance()
-    # dataframe = pd.read_excel("2021.ISE-6.xlsx",engine= 'openpyxl')
-    # filtered_df = dataframe_explorer(dataframe)
-    # st.dataframe(filtered_df, use_container_width=True)
+ with tb1:
+
+    DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
+    det = Deta(DETAA)
+    dt = det.Base("faculty_db")
+    def fetch_student_users():
+        max_attempts = 800
+        attempts = 0
+        while attempts < max_attempts:
+            try:
+                res = dt.fetch()
+                return res.items
+            except Exception as e:
+                attempts += 1
+                if attempts == max_attempts:
+                    raise e
+
+    userss = fetch_student_users()
+    usernamess = [user["key"] for user in userss]
+    namess = [user["name"] for user in userss]
+    passwordss = [user["password"] for user in userss]
+
+    student_authenticator = stauth.Authenticate(namess, usernamess, passwordss,
+        "student_dashboard", "student", cookie_expiry_days=0)
+    namess, authentication_statuss, usernames = student_authenticator.login("LOGIN", "main")
+
+    if authentication_statuss == False:
+        st.error("Username/password is incorrect")
+
+
+    if authentication_statuss:
+
+        try:
+
+            if '1RF' not in usernames :
+    
+                tab1, tab2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Semester Results Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Student Performance Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
+                 
+                with tab1:
+                    student_analysis()
+                
+                
+                with tab2:
+                    USN_analysis()
+
+    
+            else:
+                st.info('Please logout of Dept Account to sign in as student')
+
+        except Exception as e:
+            st.info('Please logout of Department Account to login in as a student!')
+
+
+
+
+ with tb2:
+    DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
+    det = Deta(DETAA)
+    dt = det.Base("faculty_db")
+    
+    
+    def insert_user(username, name, password):
+        """Returns the user on a successful user creation, otherwise raises and error"""
+        return dt.put({"key": username, "name": name, "password": password})
+
+    
+
+    with st.form("signup_form"):
+        col1, col2 = st.columns(2)
+        with col1: 
+            firstname = st.text_input("First Name")
+        with col2:
+            lastname = st.text_input("Last Name")
+        name = ''+firstname+'\u00a0'+lastname+''
+        username = st.text_input("Enter College Email ID:",placeholder="example.rvitm@rvei.edu.in")
+        password = st.text_input("Password", type="password")
+        confirm_password = st.text_input("Confirm Password", type="password")
+    
+        if st.form_submit_button("Sign Up"):
+            if password != confirm_password:
+                st.error("Passwords do not match.")
+            else:
+                usernames = [username]
+                names = [name]
+                passwords = [confirm_password]
+                hashed_passwords = stauth.Hasher(passwords).generate()
+                for (username, name, hash_password) in zip(usernames, names, hashed_passwords):
+                    insert_user(username, name, hash_password)
+                st.success("You have successfully signed up, Please login to continue")
+
+
+
+loginpage()

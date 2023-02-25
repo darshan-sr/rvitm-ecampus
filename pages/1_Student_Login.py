@@ -27,7 +27,7 @@ from pathlib import Path
 from streamlit_extras.switch_page_button import switch_page
 
 
-st.set_page_config(page_title='E-Campus Student Login',
+st.set_page_config(page_title='Student Login',
 page_icon='RVlogo.png', 
 initial_sidebar_state="expanded") 
 

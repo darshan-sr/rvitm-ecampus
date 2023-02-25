@@ -16,7 +16,7 @@ from email.mime.text import MIMEText
 from email.utils import COMMASPACE
 from email import encoders
 
-st.set_page_config(page_title='RVITM-eCampus',
+st.set_page_config(page_title='RVITM PhaliTantramsha',
 page_icon='RVlogo.png', 
 initial_sidebar_state="expanded") 
 
@@ -865,6 +865,17 @@ def loginpage():
         st.markdown("<div style='text-align:center;'><h1>RESULT ANALYSIS 📈</h1></div>", unsafe_allow_html=True,)
         st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
         st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
+        st.markdown(
+        f"""
+        <style>
+            .css-1hynsf2.e1tzin5v3{{
+                visibility: hidden;
+
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+        )
 
 
         try:

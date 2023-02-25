@@ -27,7 +27,7 @@ from email.utils import COMMASPACE
 from email import encoders
 
 
-st.set_page_config(page_title='E-Campus Login',
+st.set_page_config(page_title='Login',
 page_icon='RVlogo.png', 
 initial_sidebar_state="expanded") 
 

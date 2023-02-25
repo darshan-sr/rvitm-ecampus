@@ -7,7 +7,7 @@ from streamlit_extras.switch_page_button import switch_page
 
 from pathlib import Path
 
-st.set_page_config(page_title='RVITM E-Campus',
+st.set_page_config(page_title='RVITM PhaliTantramsha',
 page_icon='RVlogo.png', 
 initial_sidebar_state="expanded") 
 
@@ -67,10 +67,10 @@ with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
 
 
-st.markdown("<div style='text-align:center;'><h2> WELCOME TO RVITM E-CAMPUS</h2></div>", unsafe_allow_html=True,)
+st.markdown("<div style='text-align:center;'><h2> WELCOME TO RVITM PhaliTantramsha</h2></div>", unsafe_allow_html=True,)
 
 st.markdown("<div style='text-align:center;'><h1> </h1></div>", unsafe_allow_html=True,)
-st.markdown("<div style='text-align:center;'><p> RVITM E-Campus is a platform that simplifies the process of result analysis and tracking of students' CGPA. With the easy-to-use interface, you can now view and analyze your academic progress, check your results, and track your CGPA with just a few clicks. Our advanced analytics tools help you identify areas of improvement and excel in your academic journey. </p></div>", unsafe_allow_html=True,)
+st.markdown("<div style='text-align:center;'><p> RVITM PhaliTantramsha is a platform that simplifies the process of result analysis and tracking of students' CGPA. With the easy-to-use interface, you can now view and analyze your academic progress, check your results, and track your CGPA with just a few clicks. Our advanced analytics tools help you identify areas of improvement and excel in your academic journey. </p></div>", unsafe_allow_html=True,)
 st.markdown("<div style='text-align:center;'><h1> </h1></div>", unsafe_allow_html=True,)
 
 st.markdown("<div style='text-align:center;'><h1> </h1></div>", unsafe_allow_html=True,)

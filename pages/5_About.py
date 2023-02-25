@@ -4,9 +4,9 @@ import base64
 
 from pathlib import Path
 
-st.set_page_config(page_title='About E-Campus ',
-page_icon='RVlogo.png', 
-initial_sidebar_state="expanded") 
+st.set_page_config(page_title='About PhaliTantramsha ',
+page_icon='RVlogo.png',
+initial_sidebar_state="expanded")  
 
 with open('style1.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
@@ -73,13 +73,13 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 
-st.markdown("<div style='text-align:center;'><h1>About RVITM-eCampus</h1></div>", unsafe_allow_html=True,)
+st.markdown("<div style='text-align:center;'><h1>About RVITM PhaliTantramsha</h1></div>", unsafe_allow_html=True,)
 st.title("")
-aboutmessage = "Welcome to RVITM-eCampus, the academic web application of RV Institute of Technology & Management. Our platform is designed to streamline the academic processes for students, teachers, and administrators with the use of cutting-edge technologies like Python, Firebase, Django, Plotly, and ReportLab. Our goal is to provide an easy-to-use, efficient, and accurate solution for result analysis, progress report generation, and student attendance management."
+aboutmessage = "Welcome to RVITM PhaliTantramsha, the academic web application of RV Institute of Technology & Management. Our platform is designed to streamline the academic processes for students, teachers, and administrators with the use of cutting-edge technologies like Python, Firebase, Django, Plotly, and ReportLab. Our goal is to provide an easy-to-use, efficient, and accurate solution for result analysis, progress report generation, and student attendance management."
 aboutmessage2 = "Please note that our web application is still in its starting phase and is under development. Nevertheless, we are dedicated to continuously improving and adding new features to make the educational process more efficient and accessible."
-aboutmessage3 = "RVITM-eCampus is built with the user in mind and is designed to simplify the complexities of the academic process, making it easy to access and understand for everyone involved. With its user-friendly interface and powerful analytical tools, you can quickly analyze student performance, generate progress reports, and monitor attendance with ease."
+aboutmessage3 = "RVITM PhaliTantramsha is built with the user in mind and is designed to simplify the complexities of the academic process, making it easy to access and understand for everyone involved. With its user-friendly interface and powerful analytical tools, you can quickly analyze student performance, generate progress reports, and monitor attendance with ease."
 aboutmessage4 = "We are committed to providing the best possible experience for our users and continuously work towards improving our platform with new features and updates. Our goal is to support the academic community at RV Institute of Technology & Management and help make the educational process more efficient, accessible, and meaningful for all."
-aboutmessage5 = "Thank you for choosing RVITM-eCampus. We hope you find it useful and we look forward to serving you."
+aboutmessage5 = "Thank you for choosing RVITM PhaliTantramsha. We hope you find it useful and we look forward to serving you."
 st.write(aboutmessage)
 st.write(aboutmessage2)
 st.write(aboutmessage3)
@@ -103,7 +103,7 @@ with st.expander("Message from ISE HOD"):
     
     with col2:
         
-        st.write('I want to Congratulate our third semester ISE students Mr. Darshan Gowda and Mr. Abhijath Dakshesh, for their Beautiful, User friendly, Efficient software, "RVITM e-campus". This has made the lives of Faculty, Students and Parents very easy, saving a lot of time in processing and arriving at various statistics required for varied purposes and accreditations. I also thank and congratulate ISE faculty Ms. Sahana Damale for the Initiate, Guidance and Motivating the duo for the same.')
+        st.write('I want to Congratulate our third semester ISE students Mr. Darshan Gowda and Mr. Abhijath Dakshesh, for their Beautiful, User friendly, Efficient software, "RVITM PhaliTantramsha". This has made the lives of Faculty, Students and Parents very easy, saving a lot of time in processing and arriving at various statistics required for varied purposes and accreditations. I also thank and congratulate ISE faculty Ms. Sahana Damale for the Initiate, Guidance and Motivating the duo for the same.')
         st.write("I look forward many such projects which are useful in our day-to-day life , not only from the duo and also from other students... Wishing them all the Best and Prosperity......-Dr LATHA C A")
 
 

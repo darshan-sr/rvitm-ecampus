@@ -72,7 +72,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 st.header(":mailbox: Submit a Feedback!")
 st.title("")
-st.write("We are collecting feedback for our RVITM eCampus app which is used by college lectures and students. Your input on what can be improved and if there are any bugs will greatly assist in the continued development of the app. Your suggestions for new features would also be appreciated. Please fill out the contact form to share your thoughts and feedback. Your contributions will help make the app an even more useful tool for the college community")
+st.write("We are collecting feedback for our RVITM PhaliTantramsha app which is used by college lectures and students. Your input on what can be improved and if there are any bugs will greatly assist in the continued development of the app. Your suggestions for new features would also be appreciated. Please fill out the contact form to share your thoughts and feedback. Your contributions will help make the app an even more useful tool for the college community")
 st.title("")
 DETA_KEY = "d0mmbh4h7yn_nrn34JKugUPMyyXjW67tZRSYEhokL2Tj"
 deta = Deta(DETA_KEY)

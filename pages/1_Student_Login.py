@@ -376,6 +376,13 @@ def attendance():
                          xls = pd.ExcelFile(url,engine='openpyxl')
                          with st.spinner("Loading data..."):
                              StudentMarks(xls,input_str)
+
+
+                     if "21CS" in input_str:
+                        url = "https://docs.google.com/spreadsheets/d/1CoYBJ_BJSNiPTzpmb-jtdPzunkGL-tMd/export?format=xlsx"
+                        xls = pd.ExcelFile(url,engine='openpyxl')
+                        with st.spinner("Loading data..."):
+                            StudentMarks(xls,input_str)
         
                 with tab2:
                     st.info("Coming Soon...")

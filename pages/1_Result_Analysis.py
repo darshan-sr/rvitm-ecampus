@@ -833,7 +833,7 @@ def loginpage():
     ) 
  if selected == 'Login':
 
-    DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
+    DETAA = "d0hnjjqwdkk_N7cRHSjs5JT7A5kMg8DuYjNHHaiLb2Cc"
     det = Deta(DETAA)
     dt = det.Base("faculty_db")
     def fetch_student_users():
@@ -865,17 +865,7 @@ def loginpage():
         st.markdown("<div style='text-align:center;'><h1>RESULT ANALYSIS 📈</h1></div>", unsafe_allow_html=True,)
         st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
         st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
-        st.markdown(
-        f"""
-        <style>
-            .css-1hynsf2.e1tzin5v3{{
-                visibility: hidden;
 
-            }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-        )
 
 
         try:
@@ -904,7 +894,7 @@ def loginpage():
 
 
  elif selected == 'Signup':
-    DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
+    DETAA = "d0hnjjqwdkk_N7cRHSjs5JT7A5kMg8DuYjNHHaiLb2Cc"
     det = Deta(DETAA)
     dt = det.Base("faculty_db")
     

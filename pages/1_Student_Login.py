@@ -7,20 +7,12 @@ import base64
 
 import streamlit_authenticator as stauth
 
-from datetime import datetime
 from deta import Deta
 import random
 
-import textwrap
-import datetime
-import zipfile
 
+import re
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email.mime.text import MIMEText
-from email.utils import COMMASPACE
-from email import encoders
 from pathlib import Path
 
 
@@ -93,10 +85,53 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 
-
 def StudentMarks(xls,input_str):
+        total_sgpa = 0
+        num_semesters = 0
+        
+        for sheet_name in xls.sheet_names[1:]:
+            data = pd.read_excel(xls, sheet_name=sheet_name, header=None)
+            student_data = data.loc[data[data.columns[1]] == input_str]
+            total_gradescore = 0
+            totalcredits = 0
+        
+            for i in range(3, 36, 4):
+                total = student_data[data.columns[i+2]].values[0]
+                credits = data.iloc[0, i]
+                numeric_str = re.sub("[^0-9]", "", credits)
+                numeric_str = int(numeric_str)
+                totalcredits += numeric_str
+                gradepoints = 0
+                if total >= 90:
+                    gradepoints = 10
+                elif total >= 80:
+                    gradepoints = 9
+                elif total >= 70:
+                    gradepoints = 8
+                elif total >= 60:
+                    gradepoints = 7
+                elif total >= 55:
+                    gradepoints = 6
+                elif total >= 50:
+                    gradepoints = 5
+                elif total >= 40:
+                    gradepoints = 4
+        
+                gradescore = int(gradepoints)*int(numeric_str)
+                total_gradescore += gradescore
+            
+            totalcredits = totalcredits * 10
+            sgpa = round(total_gradescore/totalcredits*10,2)
+            total_sgpa += sgpa
+            num_semesters += 1
+        
+        cgpa = round(total_sgpa/num_semesters, 2)
 
         data = pd.read_excel(xls)
+
+     
+
+        
         student_data = data.loc[data['USN'] == input_str]
         BACK = student_data[data.columns[44]].values[0]
         NAME = student_data[data.columns[2]].values[0] 
@@ -130,33 +165,106 @@ def StudentMarks(xls,input_str):
         col1.metric("NAME:",NAME)
         col2.metric("USN:",USN)
         col1, col2= st.columns(2)
-        col1.metric("FAILED SUBJETS:",BACK)
-        col2.metric("Average Percentage:",TCGPA)
+        col1.metric("CURRENT NO. OF BACKLOGS:",BACK)
+        col2.metric("CURRENT CGPA:",cgpa)
 
 
+
+
+        sgpas = []
+        semesters = []
         
-        sheet_names = xls.sheet_names
-        student_data = []
-        for sheet_name in sheet_names:
-            data = pd.read_excel(xls, sheet_name=sheet_name)
-            student_record = data.loc[data['USN'] == input_str]
-            student_data.append({
-                'sheet_name': sheet_name,
-                'percentage': student_record[student_record.columns[40]].values[0]
-            })
-    
-        student_data_df = pd.DataFrame(student_data)
-        student_data_df['text'] = student_data_df['percentage'].apply(lambda x: '{:.2f}%'.format(x))
-        fig = px.bar(student_data_df, x='sheet_name', y='percentage',text='text',title=f"Comparison of {NAME}'s Percentage")
-        fig.update_layout(xaxis_title='',yaxis_title='Percentage',width=700, height=600,yaxis=dict(range=[0, 100]))
-        fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
+        for sheet_name in xls.sheet_names:
+            data = pd.read_excel(xls, sheet_name=sheet_name, header=None)
+            student_data = data.loc[data[data.columns[1]] == input_str]
+            total_gradescore = 0
+            totalcredits = 0
+        
+            for i in range(3, 36, 4):
+                total = student_data[data.columns[i+2]].values[0]
+                credits = data.iloc[0, i]
+                numeric_str = re.sub("[^0-9]", "", credits)
+                numeric_str = int(numeric_str)
+                totalcredits += numeric_str
+                gradepoints = 0
+                if total >= 90:
+                    gradepoints = 10
+                elif total >= 80:
+                    gradepoints = 9
+                elif total >= 70:
+                    gradepoints = 8
+                elif total >= 60:
+                    gradepoints = 7
+                elif total >= 55:
+                    gradepoints = 6
+                elif total >= 50:
+                    gradepoints = 5
+                elif total >= 40:
+                    gradepoints = 4
+        
+                gradescore = int(gradepoints)*int(numeric_str)
+                total_gradescore += gradescore
+            
+            totalcredits = totalcredits * 10
+            sgpa = round(total_gradescore/totalcredits*10,2)
+            sgpas.append(sgpa)
+            semesters.append(sheet_name)
+        
+        fig = go.Figure([go.Bar(x=semesters, y=sgpas)])
+        fig.update_layout(
+            title={
+                'text': "SGPA for each semester",
+                'y':0.9,
+                'x':0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'},
+            xaxis_title="Semester",
+            yaxis_title="SGPA"
+        )
+        
         st.plotly_chart(fig)
 
 
 
-
-
         sheet_name = st.selectbox("Select the semester", xls.sheet_names)
+
+        data = pd.read_excel(xls,sheet_name=sheet_name,header=None) 
+
+        student_data = data.loc[data[data.columns[1]] == input_str]
+        total_gradescore = 0
+        totalcredits = 0
+
+        for i in range(3, 36, 4):
+            
+            total = student_data[data.columns[i+2]].values[0]
+            credits = data.iloc[0, i]
+            numeric_str = re.sub("[^0-9]", "", credits)
+            numeric_str = int(numeric_str)
+            totalcredits += numeric_str
+            gradepoints = 0
+            if total >= 90:
+                gradepoints = 10
+            elif total >= 80:
+                gradepoints = 9
+            elif total >= 70:
+                gradepoints = 8
+            elif total >= 60:
+                gradepoints = 7
+            elif total >= 55:
+                gradepoints = 6
+            elif total >= 50:
+                gradepoints = 5
+            elif total >= 40:
+                gradepoints = 4
+
+            gradescore = int(gradepoints)*int(numeric_str)
+            total_gradescore += gradescore
+        
+        totalcredits = totalcredits * 10
+        sgpa = round(total_gradescore/totalcredits*10,2)
+
+
+
         data = pd.read_excel(xls, sheet_name=sheet_name)
     
         student_data = data.loc[data['USN'] == input_str]
@@ -165,9 +273,8 @@ def StudentMarks(xls,input_str):
         st.markdown("<div style='text-align:center;'><h3>Marks Sheet for the "+sheet_name+" </h3></div>", unsafe_allow_html=True)
         st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
         st.write("The below table presents a comprehensive view of the student's marks sheet for the specific semester, including the percentage, total marks, and grade obtained by the student ")
-        
 
-        
+
         subjects = []
         for i in range(3, 36, 4):
           if not pd.isnull(data.iloc[0, i]):
@@ -179,8 +286,10 @@ def StudentMarks(xls,input_str):
             subject["External Marks"] = student_data[data.columns[i+1]].values[0]
             subject["Total"] = student_data[data.columns[i+2]].values[0]
             subject["Results"] = student_data[data.columns[i+3]].values[0]
+            
+            
 
-                #Assign the grades and grade points based on the total marks
+    
             subject["Grade"] = "F"
             subject["Grade Points"] = 0
             if subject["Total"] >= 90:
@@ -206,7 +315,8 @@ def StudentMarks(xls,input_str):
                 subject["Grade Points"] = 4
             subjects.append(subject)
 
-        # CSS to inject contained in a string
+
+        
         table_html = data.to_html(index=False)
         st.markdown("<style>table {width:50%;} td, th {border: 2px solid #a4a8ab;} td:last-child, th:last-child {border-right: 2px solid #a4a8ab;} tr:last-child td {border-bottom: 2px solid #a4a8ab;} table.dataframe {display: none;}</style>", unsafe_allow_html=True)
         st.write(table_html, unsafe_allow_html=True)
@@ -224,7 +334,7 @@ def StudentMarks(xls,input_str):
 
 
   
-
+        
         Total= int(student_data[data.columns[39]].values[0])
         Percentage= round(student_data[data.columns[40]].values[0],2)
         Grade= student_data[data.columns[41]].values[0]
@@ -239,7 +349,7 @@ def StudentMarks(xls,input_str):
         col3.metric("GRADE:",Grade)
         
         col4,col5,col6 = st.columns(3)
-        col4.metric("RESULTS:",Results)
+        col4.metric("SGPA:",sgpa)
         col5.metric("PASSED SUBJECTS:",Passed_Subjects)
         col6.metric("FAILED SUBJECTS",Failed_Subjects+Absent_Subjects)
         
@@ -305,8 +415,13 @@ def StudentMarks(xls,input_str):
     
                 st.plotly_chart(fig)
 
+       
+        
+        
 
-    
+
+
+
 def attendance():
 
 
@@ -358,7 +473,7 @@ def attendance():
           
                 st.sidebar.success("Welcome "+namess+"")
                 student_authenticator.logout("Logout", "sidebar")
-                tab1, tab2 = st.tabs(["Marks Analysis", "Attendance"])
+                tab1, tab2 = st.tabs(["\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Marks Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0", "\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Attendance\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0"])
         
                 with tab1:
         
@@ -379,6 +494,7 @@ def attendance():
 
 
                      if "21CS" in input_str:
+    
                         url = "https://docs.google.com/spreadsheets/d/1CoYBJ_BJSNiPTzpmb-jtdPzunkGL-tMd/export?format=xlsx"
                         xls = pd.ExcelFile(url,engine='openpyxl')
                         with st.spinner("Loading data..."):
@@ -393,7 +509,7 @@ def attendance():
 
         except Exception as e:
             st.info('Please logout of Department Account to login in as a student!')
-            student_authenticator.logout("Logout","sidebar")
+           
 
 
 
@@ -462,3 +578,5 @@ def attendance():
 
 
 attendance()
+
+ 

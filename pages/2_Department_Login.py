@@ -508,7 +508,7 @@ def progress_pdf(Branch_Choice):
             smtpObj.ehlo()
             smtpObj.starttls()
             smtpObj.login(SMTP_USERNAME, SMTP_PASSWORD)
-            smtpObj.sendmail(SMTP_USERNAME, [email], msg.as_string())
+            smtpObj.sendmail(SMTP_USERNAME, [email,cc_email], msg.as_string())
             smtpObj.quit()
         
             st.write("Email sent to\u00a0"+student_name+"\u00a0 parent's mail - ", email)

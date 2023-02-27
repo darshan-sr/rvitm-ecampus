@@ -118,7 +118,6 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 def excel_update(username):
-        try:
             if username == 'isedept' or username == 'csedept' or username == 'ecedept' or username == 'medept':
                  with st.spinner("Loading..."):
 
@@ -175,14 +174,22 @@ def excel_update(username):
                         st.dataframe(df)
 
             else:
-                st.info('Please Logout of Student account to continue!')
-        except Exception as e:
-            st.info('Please Logout of Student account to continue!', e)           
+                st.info('Please Logout of Student account to continue!')       
                 
             
 
 
-def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generation,semester,no_of_subjects,note):  
+def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,semester,no_of_subjects,note):  
+
+    from datetime import datetime
+    today = datetime.today()
+    day = today.day
+    suffix = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+    date_of_generation = today.strftime(f"%d{suffix} %b, %Y")
+    date_of_generation = str(date_of_generation)
+
+
+
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0, leftMargin=50, rightMargin=50, bottomMargin=0)
     
@@ -213,10 +220,10 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     image.vAlign = "TOP"
     elements.append(image)
 
-    heading = Paragraph(Branch_Choice, bold_times_style)
+    heading = Paragraph('<u>'+Branch_Choice+'</u>', bold_times_style)
     elements.append(heading)
  
-    heading = Paragraph(test_choice, bold_times_style)
+    heading = Paragraph('<u>'+test_choice+'</u>', bold_times_style)
     elements.append(heading)
 
     style_sheet = getSampleStyleSheet() #date
@@ -245,7 +252,7 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     USN = df.iloc[row,2]
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
-    text = "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0The progress report of your ward <b>"+str(student_name)+",\u00a0"+str(USN)+"</b> studying in <b>"+str(semester)+"</b> is given below: "
+    text = "\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0The progress report of your ward <b>"+str(student_name)+",\u00a0"+str(USN)+"</b> studying in <b>"+str(semester)+"</b> is given below : "
     para = Paragraph(text, style)
     elements.append(para)
 
@@ -288,8 +295,8 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     ('fontsize', (-1,-1), (-1,-1), 14),
     ('ALIGNMENT', (1, 1), (1, -1), 'LEFT'),
     ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-    ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
-    ('BOTTOMPADDING', (0, 1), (-1, -1), 10),
+    ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+    ('BOTTOMPADDING', (0, 1), (-1, -1), 5),
     ('BACKGROUND', (0, 1), (-1, -1), '#FFFFFF'),
     ('GRID', (0, 0), (-1, -1), 1, "black")
   ]))
@@ -323,13 +330,31 @@ def generate_pdf(df, row,Branch_Choice,test_choice,submission_d,date_of_generati
     counsellor_mail = str(df.iloc[row,6])
     style_sheet = getSampleStyleSheet()
     style = style_sheet['Normal']
-    text = "Please download, sign and send the scanned copy of the report to “"+counsellor_mail+"” on or before "+submission_d+"."
+    text = "Please sign and send the report to “"+counsellor_mail+"” on or before "+submission_d+"."
     para = Paragraph(text, style)
     elements.append(para)
 
     image_path = "RV_Signature.png"
-    image = Image(image_path, width=8.5*inch, height=1.7155*inch)
+    image = Image(image_path, width=7*inch, height=1.4155*inch)
     elements.append(image)
+
+    style_sheet = getSampleStyleSheet()
+    style = style_sheet['Normal']
+    text = "\u00a0" 
+    para = Paragraph(text, style)
+    elements.append(para)
+
+    style_sheet = getSampleStyleSheet()
+    style = style_sheet['Normal']
+    text = "\u00a0"
+    para = Paragraph(text, style)
+    elements.append(para)
+
+    style_sheet = getSampleStyleSheet()
+    style = style_sheet['Normal']
+    text = "This report was auto-generated through RVITM E-Campus"
+    para = Paragraph(text, style)
+    elements.append(para)
 
     doc.build(elements)
     
@@ -342,18 +367,20 @@ def progress_pdf(Branch_Choice):
 
     test_choice = st.selectbox("Choose the test: ",["PROGRESS REPORT-I","PROGRESS REPORT-II","PROGRESS REPORT-III"])   
 
-    date_of_generation = st.text_input("Enter the date of Generation  ",placeholder="example: 12th March, 2023")
+    from datetime import datetime, date
 
-    date_of_generation=str(date_of_generation)  
-    
-    submission_d = st.date_input("The Ward Should Sumbit the Signed Progress Report to Counsellor Before:",
-    datetime.date.today())
+    submission_d = st.date_input("The Ward Should Submit the Signed Progress Report to Counsellor Before:", date.today())
+    day = submission_d.day
+    suffix = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+    submission_d = submission_d.strftime(f"%d{suffix} %b, %Y")
 
-    submission_d=str(submission_d)
+        
     
     semester = st.selectbox("Select the Semester: ",[" I Semester BE ( ISE ) "," II Semester BE ( ISE ) ", " III Semester BE ( ISE ) "," IV Semester BE ( ISE )", "V Semester BE ( ISE )", "VI Semester BE ( ISE )","VII Semester BE ( ISE )","VII Semester BE ( ISE )"])   
     no_of_subjects = st.selectbox("Select the no of Subjects: ",[6,7,8,9,5,4,3,2,1])   
     note = st.text_area("General Note (If any*):",placeholder="example: Attendace considered up till 17th March 2023")
+
+
     
     uploaded_file = st.file_uploader("Upload the Marks Sheet Excel File for the test:", type=["xlsx"])   
 
@@ -372,7 +399,7 @@ def progress_pdf(Branch_Choice):
             zip_buffer = BytesIO()
             with zipfile.ZipFile(zip_buffer, "w") as zip_file:
                 for i in range(2, df.shape[0]):
-                    buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d, date_of_generation, semester, no_of_subjects, note)
+                    buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d, semester, no_of_subjects, note)
                     file_name = f"{df.iloc[i, 1]}.pdf"
                     zip_file.writestr(file_name, buffer.getvalue())
             
@@ -390,7 +417,7 @@ def progress_pdf(Branch_Choice):
             progress_bar = st.progress(0)
             
             for i in range(2,df.shape[0]):
-                buffer = generate_pdf(df, i,Branch_Choice,test_choice,submission_d,date_of_generation,semester,no_of_subjects,note)
+                buffer = generate_pdf(df, i,Branch_Choice,test_choice,no_of_subjects,note)
                 file_name = f"{df.iloc[i, 1]}.pdf"
     
             
@@ -412,7 +439,7 @@ def progress_pdf(Branch_Choice):
         # Generate the PDFs for each student and store it in a dictionary with the student name as the key
         pdfs = {}
         for i in range(2, df.shape[0]):
-            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d, date_of_generation,semester,no_of_subjects,note)
+            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,semester,no_of_subjects,note)
             file_name = f"{df.iloc[i, 1]}.pdf"
          
             b64 = base64.b64encode(buffer.getvalue()).decode()
@@ -452,15 +479,17 @@ def progress_pdf(Branch_Choice):
         progress_bar = st.progress(0)
 
         for i in range(2, df.shape[0]):
-            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,date_of_generation,semester,no_of_subjects,note)
+            buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,semester,no_of_subjects,note)
             file_name = f"{df.iloc[i, 1]}.pdf"
             email = df.iloc[i, 4]
+            cc_email = df.iloc[i,6]
             father = str(df.iloc[i, 3])
             student_name = str(df.iloc[i, 1])
 
             msg = MIMEMultipart()
             msg['From'] = SMTP_USERNAME
             msg['To'] = COMMASPACE.join([email])
+            msg['Cc'] = COMMASPACE.join([cc_email])
             msg['Subject'] = ""+test_choice+"\u00a0 "+semester
             
             body = "Dear <b>"+father+"</b> ,<br><br>Herewith enclosed the <b>"+semester+" "+test_choice+"</b>\u00a0  of your ward <b>"+student_name+"</b><br><br>Thanks & Regards,<br><b>RVITM</b>"
@@ -511,7 +540,7 @@ def final_progresspdf(username):
         else:
             st.info('Please Logout of Student account to continue!')
     except Exception as e:
-        st.info('Please Logout of Student account to continue!', e)
+        st.info('Please Logout of Student account to continue!')
    
     
 

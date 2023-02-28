@@ -127,6 +127,7 @@ def StudentMarks(xls,input_str):
         
         cgpa = round(total_sgpa/num_semesters, 2)
 
+
         data = pd.read_excel(xls)
 
      

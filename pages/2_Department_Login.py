@@ -481,7 +481,7 @@ def progress_pdf(Branch_Choice):
         for i in range(2, df.shape[0]):
             buffer = generate_pdf(df, i, Branch_Choice, test_choice, submission_d,semester,no_of_subjects,note)
             file_name = f"{df.iloc[i, 1]}.pdf"
-            email = df.iloc[i, 6]
+            email = df.iloc[i, 4]
             cc_email = df.iloc[i,6]
             father = str(df.iloc[i, 3])
             student_name = str(df.iloc[i, 1])

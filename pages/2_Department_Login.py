@@ -394,8 +394,7 @@ def progress_pdf(Branch_Choice):
         download_choice = st.selectbox("Choose how you want to download the report:", ["Download all Student's pdf in ZIP format","Download report Individually"])
         
         if download_choice == "Download all Student's pdf in ZIP format":
-            st.write("Generating Progress Report...")
-            progress_bar = st.progress(0)
+            progress_bar = st.progress(0, text = 'Generating Report')
             zip_buffer = BytesIO()
             with zipfile.ZipFile(zip_buffer, "w") as zip_file:
                 for i in range(2, df.shape[0]):
@@ -404,7 +403,7 @@ def progress_pdf(Branch_Choice):
                     zip_file.writestr(file_name, buffer.getvalue())
             
                     progress_value = int((i - 1) / (df.shape[0] - 2) * 100)
-                    progress_bar.progress(progress_value)
+                    progress_bar.progress(progress_value, text = 'Generating Report')
             
             # Generate a download link for the zip file
             zip_name = ""+test_choice+"."+semester+".zip"

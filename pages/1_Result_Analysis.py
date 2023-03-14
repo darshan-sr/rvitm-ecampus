@@ -6,17 +6,12 @@ from streamlit_option_menu import option_menu
 import base64 
 from deta import Deta
 import streamlit_authenticator as stauth
-from streamlit_extras.switch_page_button import switch_page
 import random
 import re
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email.mime.text import MIMEText
-from email.utils import COMMASPACE
-from email import encoders
 
-st.set_page_config(page_title='RVITM PhaliTantramsha',
+
+st.set_page_config(page_title='RVITM E-Campus',
 page_icon='RVlogo.png', 
 initial_sidebar_state="expanded") 
 
@@ -939,14 +934,9 @@ def loginpage():
  
 
  
-#  tb1, tb2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Login\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Signup\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
- selected = option_menu(
-        menu_title=None,
-        options=["Login","Signup"],
-        icons=["person-workspace","person"],
-        orientation="horizontal",
-    ) 
- if selected == 'Login':
+ tb1, tb2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Login\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Signup\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
+ 
+ with tb1:
 
     DETAA = "d0hnjjqwdkk_N7cRHSjs5JT7A5kMg8DuYjNHHaiLb2Cc"
     det = Deta(DETAA)
@@ -977,38 +967,38 @@ def loginpage():
 
 
     if authentication_statuss:
-        st.markdown("<div style='text-align:center;'><h1>RESULT ANALYSIS 📈</h1></div>", unsafe_allow_html=True,)
-        st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
-        st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
 
 
 
-        try:
 
-            if '1RF' not in usernames :
-                st.sidebar.success("Welcome "+namess+"")
-                student_authenticator.logout("Logout", "sidebar")
+
+        if '1RF' not in usernames :
+            st.markdown("<div style='text-align:center;'><h1>RESULT ANALYSIS 📈</h1></div>", unsafe_allow_html=True,)
+            st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
+            st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
+            st.sidebar.success("Welcome "+namess+"")
+            student_authenticator.logout("Logout", "sidebar")
+
+            tab1, tab2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Semester Results Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Student Performance Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
+             
+            with tab1:
+                student_analysis()
+            
+            
+            with tab2:
+
+                USN_analysis()
+
+        else:
+            st.info('Please logout of Student Account to sign in as student')
+            student_authenticator.logout("Logout","main")
+
     
-                tab1, tab2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Semester Results Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Student Performance Analysis\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
-                 
-                with tab1:
-                    student_analysis()
-                
-                
-                with tab2:
-                    USN_analysis()
-
-    
-            else:
-                st.info('Please logout of Student Account to sign in as student')
-
-        except Exception as e:
-            st.info('Please logout of Department Account to login in as a student!')
 
 
 
 
- elif selected == 'Signup':
+ with tb2:
     DETAA = "d0hnjjqwdkk_N7cRHSjs5JT7A5kMg8DuYjNHHaiLb2Cc"
     det = Deta(DETAA)
     dt = det.Base("faculty_db")
@@ -1018,7 +1008,7 @@ def loginpage():
         """Returns the user on a successful user creation, otherwise raises and error"""
         return dt.put({"key": username, "name": name, "password": password})
 
-    
+    st.markdown("<div style='text-align:center;'><h1></h1></div>", unsafe_allow_html=True)
     with st.form("my_form"):
         col1, col2 = st.columns(2)
         with col1: 
@@ -1037,13 +1027,13 @@ def loginpage():
                 # Generate a 6-digit random OTP
                 otp = str(random.randint(100000, 999999))
                 # Set up the email message
-                sender_email = "rvit21bis025.rvitm@rvei.edu.in" 
+                sender_email = "ecampus.rvitm@rvei.edu.in" 
                 receiver_email = username
                 message = f"Subject: OTP Verification\n\nYour OTP is: {otp}"
                 # Send the email
                 with smtplib.SMTP("smtp.gmail.com", 587) as server:
                     server.starttls()
-                    server.login(sender_email, "rsst123456") 
+                    server.login(sender_email, "102435t0qu5") 
                     server.sendmail(sender_email, receiver_email, message)
                 # Store the OTP for later use
                 st.session_state["otp"] = otp

@@ -426,15 +426,11 @@ def StudentMarks(xls,input_str):
 def attendance():
 
 
+ tb1, tb2 = st.tabs(['\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Login\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0   ','\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Signup\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 \u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'])
  
- selected = option_menu(
-        menu_title=None,
-        options=["Login","Signup"],
-        icons=["person-workspace","person"],
-        orientation="horizontal",
-    )
 
- if selected == "Login":
+
+ with tb1:
 
 
     DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
@@ -467,10 +463,11 @@ def attendance():
 
     if authentication_statuss:
 
-        try:
+    
 
             if '1RF' in usernames :
-    
+
+
           
                 st.sidebar.success("Welcome "+namess+"")
                 student_authenticator.logout("Logout", "sidebar")
@@ -508,14 +505,11 @@ def attendance():
                 st.info('Please logout of Dept Account to sign in as student')
                 student_authenticator.logout("Logout","main")
 
-        except Exception as e:
-            st.info('Please logout of Department Account to login in as a student!')
-           
 
 
 
 
- if selected == "Signup":
+ with tb2:
 
     st.markdown("<div style='text-align:center;'><h1>          </h1></div>", unsafe_allow_html=True)
     DETAA = "d0mmbh4h7yn_aVTdWVFf5UQTxWHZZmeX144mkXaiD9Ht"
@@ -548,13 +542,13 @@ def attendance():
                 # Generate a 6-digit random OTP
                 otp = str(random.randint(100000, 999999))
                 # Set up the email message
-                sender_email = "rvit21bis025.rvitm@rvei.edu.in" 
+                sender_email = "ecampus.rvitm@rvei.edu.in" 
                 receiver_email = email
                 message = f"Subject: OTP Verification\n\nYour OTP is: {otp}"
                 # Send the email
                 with smtplib.SMTP("smtp.gmail.com", 587) as server:
                     server.starttls()
-                    server.login(sender_email, "rsst123456") 
+                    server.login(sender_email, "102435t0qu5") 
                     server.sendmail(sender_email, receiver_email, message)
                 # Store the OTP for later use
                 st.session_state["otp"] = otp

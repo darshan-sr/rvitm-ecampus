@@ -1,10 +1,7 @@
 
 import streamlit as st
-from PIL import Image
 import base64
 from streamlit_extras.switch_page_button import switch_page
-
-
 from pathlib import Path
 
 st.set_page_config(page_title='RVITM E-Campus',

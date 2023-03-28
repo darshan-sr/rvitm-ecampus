@@ -542,13 +542,13 @@ def attendance():
                 # Generate a 6-digit random OTP
                 otp = str(random.randint(100000, 999999))
                 # Set up the email message
-                sender_email = "ecampus.rvitm@rvei.edu.in" 
+                sender_email = "rvit21bis025.rvitm@rvei.edu.in" 
                 receiver_email = email
                 message = f"Subject: OTP Verification\n\nYour OTP is: {otp}"
                 # Send the email
                 with smtplib.SMTP("smtp.gmail.com", 587) as server:
                     server.starttls()
-                    server.login(sender_email, "102435t0qu5") 
+                    server.login(sender_email, "rsst123456") 
                     server.sendmail(sender_email, receiver_email, message)
                 # Store the OTP for later use
                 st.session_state["otp"] = otp

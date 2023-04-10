@@ -530,16 +530,15 @@ def final_progresspdf(username):
     elif username == 'medept' :
         Branch_Choice = 'MECHANICAL ENGINEERING'
 
-    try:
-        if username == 'isedept' or username == 'csedept' or username == 'ecedept' or username == 'medept':
+    
+    if username == 'isedept' or username == 'csedept' or username == 'ecedept' or username == 'medept':
             st.markdown("<div style='text-align:center;'><h2> </h2></div>", unsafe_allow_html=True,)
             st.markdown("<div style='text-align:center;'><h3> 📑 PROGRESS REPORT GENERATOR </h3></div>", unsafe_allow_html=True,)
             st.markdown("<div style='text-align:center;'><h1> </h1></div>", unsafe_allow_html=True,)
             progress_pdf(Branch_Choice)
-        else:
+    else:
             st.info('Please Logout of Student account to continue!')
-    except Exception as e:
-        st.info('Please Logout of Student account to continue!')
+    
    
     
 
